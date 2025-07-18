@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -53,19 +54,22 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
             List<RaycastResult> results = new List<RaycastResult>();
             raycaster.Raycast(pointerData, results);
-            GridItemUI gridItemUI = (results[0]).gameObject.GetComponent<GridItemUI>();
-            if (gridItemUI == null)
+            if (results.Count > 0)
             {
-                Debug.Log(results[0].gameObject.name);
-                return;
-            }
-            itemUISelected = results[0].gameObject;
-            Debug.Log(gridItemUI.gridItem.name);
-            itemUISelected.GetComponent<Image>().color = Color.red;
-            itemSelectedData = gridItemUI.gridItem;
-            if(scrollRect != null)
-            {
-                scrollRect.enabled = false;
+                GridItemUI gridItemUI = (results[0]).gameObject.GetComponent<GridItemUI>();
+                if (gridItemUI == null)
+                {
+                    Debug.Log(results[0].gameObject.name);
+                    return;
+                }
+                itemUISelected = results[0].gameObject;
+                Debug.Log(gridItemUI.gridItem.name);
+                itemUISelected.GetComponent<Image>().color = Color.red;
+                itemSelectedData = gridItemUI.gridItem;
+                if (scrollRect != null)
+                {
+                    scrollRect.enabled = false;
+                }
             }
         }
         else if(Input.GetMouseButtonUp(0))
@@ -92,15 +96,12 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected.GetComponentInChildren<SpriteRenderer>().sprite = itemSelectedData.spriteTemp;
                     itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
                     gridItems.Remove(itemSelectedData);
+                    GridItemObject gridItemObject = itemSelected.AddComponent<GridItemObject>();
+                    gridItemObject.gridItem = itemSelectedData;
+                    DragDropManager.instance.SetDrag(itemSelected);
                     itemUISelected = null;
                     RendererList();
                 }
-            }
-            if(itemSelected && itemSelectedData)
-            {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePos.z = 0; // nếu game 2D
-                itemSelected.transform.position = mousePos;
             }
         }
     }
@@ -144,6 +145,11 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 }
 
 public class GridItemUI : MonoBehaviour
+{
+    public GridItem gridItem;
+}
+
+public class GridItemObject : MonoBehaviour
 {
     public GridItem gridItem;
 }

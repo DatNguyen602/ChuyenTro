@@ -22,7 +22,7 @@ public class GridItemCreator : EditorWindow
     [MenuItem("Tools/Grid Item Creator")]
     public static void ShowWindow()
     {
-        GetWindow<GridItemCreator>("🧩 Grid Item Creator");
+        GetWindow<GridItemCreator>("Grid Item Creator");
     }
 
     private void OnEnable()
@@ -41,12 +41,12 @@ public class GridItemCreator : EditorWindow
     private void OnGUI()
     {
         GUILayout.Space(8);
-        GUILayout.Label("📦 Thông tin vật phẩm", EditorStyles.boldLabel);
+        GUILayout.Label("Thông tin vật phẩm", EditorStyles.boldLabel);
         itemName = EditorGUILayout.TextField("Tên", itemName);
         id = EditorGUILayout.TextField("ID", id);
 
         GUILayout.Space(10);
-        GUILayout.Label("🖼️ Cài đặt Sprite", EditorStyles.boldLabel);
+        GUILayout.Label("Cài đặt Sprite", EditorStyles.boldLabel);
         sprite = (Sprite)EditorGUILayout.ObjectField("Sprite", sprite, typeof(Sprite), false);
         spriteScale = EditorGUILayout.Slider("Kích thước (số ô)", spriteScale, 0.1f, 5f);
         spriteOffsetPercent = EditorGUILayout.Vector2Field("Dịch chuyển (%)", spriteOffsetPercent);
@@ -55,7 +55,7 @@ public class GridItemCreator : EditorWindow
         GUILayout.BeginVertical();
         GUILayout.Space(10);
         GUILayout.BeginHorizontal();
-        GUILayout.Label("🎯 Grid", EditorStyles.boldLabel);
+        GUILayout.Label("Grid", EditorStyles.boldLabel);
         cellSize = Mathf.RoundToInt(EditorGUILayout.Slider(cellSize, 5, 50, GUILayout.MaxWidth(312)));
         GUILayout.EndHorizontal();
         Rect previewRect = GUILayoutUtility.GetRect(cellSize * gridRadius * 2, cellSize * gridRadius * 2);
@@ -64,7 +64,7 @@ public class GridItemCreator : EditorWindow
 
         GUILayout.Space(10);
         GUILayout.BeginVertical();
-        GUILayout.Label("📝 Chỉnh sửa vật phẩm có sẵn", EditorStyles.boldLabel);
+        GUILayout.Label("Chỉnh sửa vật phẩm có sẵn", EditorStyles.boldLabel);
 
         // Lấy tất cả GridItem trong project
         string[] guids = AssetDatabase.FindAssets("t:GridItem");
@@ -95,15 +95,15 @@ public class GridItemCreator : EditorWindow
         GUILayout.Space(10);
         if (!isEditing)
         {
-            if (GUILayout.Button("✅ Tạo GridItem", GUILayout.Height(35)))
+            if (GUILayout.Button("Tạo GridItem", GUILayout.Height(35)))
                 CreateItemAsset();
         }
         else
         {
-            if (GUILayout.Button("💾 Lưu thay đổi", GUILayout.Height(35)))
+            if (GUILayout.Button("Lưu thay đổi", GUILayout.Height(35)))
                 SaveEditedItem();
 
-            if (GUILayout.Button("↩️ Hủy chỉnh sửa"))
+            if (GUILayout.Button("Hủy chỉnh sửa"))
                 ClearForm();
         }
         GUILayout.EndVertical();
@@ -215,7 +215,7 @@ public class GridItemCreator : EditorWindow
 
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = newItem;
-        Debug.Log($"✅ Tạo thành công GridItem: {path}");
+        Debug.Log($"Tạo thành công GridItem: {path}");
 
         ClearForm();
     }
@@ -234,7 +234,7 @@ public class GridItemCreator : EditorWindow
         EditorUtility.SetDirty(selectedItem);
         AssetDatabase.SaveAssets();
 
-        Debug.Log($"💾 Đã lưu chỉnh sửa cho GridItem: {selectedItem.name}");
+        Debug.Log($"Đã lưu chỉnh sửa cho GridItem: {selectedItem.name}");
         ClearForm();
     }
 
