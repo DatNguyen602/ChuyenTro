@@ -205,7 +205,7 @@ public class GridItemCreator : EditorWindow
         newItem.spriteOffsetPercent = spriteOffsetPercent;
         newItem.occupiedCells = new List<Vector2Int>(occupiedCells);
 
-        string folderPath = "Assets/GridItems";
+        string folderPath = "Assets/Resources/GridItems";
         if (!AssetDatabase.IsValidFolder(folderPath))
             AssetDatabase.CreateFolder("Assets", "GridItems");
 
