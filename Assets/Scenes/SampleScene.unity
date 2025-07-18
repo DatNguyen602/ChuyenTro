@@ -1015,14 +1015,7 @@ MonoBehaviour:
   gridItems:
   - {fileID: 11400000, guid: 10a12c33f54b1af49b7d5d49f1ec12a4, type: 2}
   - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
-  - {fileID: 11400000, guid: fab592d630aa2ef41bc4ac040ac07661, type: 2}
+  - {fileID: 11400000, guid: 86b3a6f5a9b3dc24b8d133e49c7a4776, type: 2}
   gridParent: {fileID: 2036356096}
   scrollRect: {fileID: 807128062}
   raycaster: {fileID: 2068390312}

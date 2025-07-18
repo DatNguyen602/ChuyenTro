@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DragDropManager : MonoBehaviour
 {
@@ -11,11 +13,25 @@ public class DragDropManager : MonoBehaviour
         if(!objectDrag) objectDrag = obj;
 
         GridItemObject gridItemObject = objectDrag.GetComponent<GridItemObject>();
-        BoxCollider2D boxCollider = objectDrag.GetComponent<BoxCollider2D>();
-        if (boxCollider != null && gridItemObject != null)
+        PolygonCollider2D poly = objectDrag.GetComponent<PolygonCollider2D>();
+
+        List<Vector2[]> paths = new List<Vector2[]>();
+
+        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
         {
-            boxCollider.size = new Vector2(gridItemObject.gridItem.sprite.rect.width, gridItemObject.gridItem.sprite.rect.height) / gridItemObject.gridItem.spriteTemp.pixelsPerUnit * gridItemObject.gridItem.spriteScale;
-            boxCollider.offset = gridItemObject.gridItem.spriteOffsetPercent;
+            Vector2[] square = new Vector2[] {
+                pos + new Vector2(-0.5f, -0.5f),
+                pos + new Vector2(-0.5f,  0.5f),
+                pos + new Vector2( 0.5f,  0.5f),
+                pos + new Vector2( 0.5f, -0.5f)
+            };
+            paths.Add(square);
+        }
+
+        poly.pathCount = paths.Count;
+        for (int i = 0; i < paths.Count; i++)
+        {
+            poly.SetPath(i, paths[i]);
         }
     }
 
