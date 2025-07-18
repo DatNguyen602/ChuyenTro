@@ -6,7 +6,7 @@ public class GridItem : ScriptableObject
 {
     public string itemName;
     public string id;
-    public Sprite sprite;
+    public Sprite sprite, spriteTemp;
     public float spriteScale;
     public Vector2 spriteOffsetPercent;
     public List<Vector2Int> occupiedCells;
