@@ -95,6 +95,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected.SetActive(true);
                     itemSelected.GetComponentInChildren<SpriteRenderer>().sprite = itemSelectedData.spriteTemp;
                     itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
+                    itemSelected.transform.GetChild(0).localPosition = (Vector3) (itemSelectedData.spriteOffsetPercent);
                     gridItems.Remove(itemSelectedData);
                     GridItemObject gridItemObject = itemSelected.AddComponent<GridItemObject>();
                     gridItemObject.gridItem = itemSelectedData;

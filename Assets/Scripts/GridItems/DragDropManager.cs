@@ -9,6 +9,14 @@ public class DragDropManager : MonoBehaviour
     public void SetDrag(GameObject obj)
     {
         if(!objectDrag) objectDrag = obj;
+
+        GridItemObject gridItemObject = objectDrag.GetComponent<GridItemObject>();
+        BoxCollider2D boxCollider = objectDrag.GetComponent<BoxCollider2D>();
+        if (boxCollider != null && gridItemObject != null)
+        {
+            boxCollider.size = new Vector2(gridItemObject.gridItem.sprite.rect.width, gridItemObject.gridItem.sprite.rect.height) / gridItemObject.gridItem.spriteTemp.pixelsPerUnit * gridItemObject.gridItem.spriteScale;
+            boxCollider.offset = gridItemObject.gridItem.spriteOffsetPercent;
+        }
     }
 
     private void Awake()
@@ -46,9 +54,9 @@ public class DragDropManager : MonoBehaviour
                 Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-                if (hit.collider != null && hit.collider.transform.parent.gameObject.GetComponent<GridItemObject>())
+                if (hit.collider != null && hit.collider.gameObject.GetComponent<GridItemObject>())
                 {
-                    objectDrag = hit.collider.gameObject;
+                    SetDrag(hit.collider.gameObject);
                 }
             }
         }
