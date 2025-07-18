@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private GameObject gridItemPrefab, itemTemplate;
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
     [SerializeField] private Transform gridParent;
+    [SerializeField] private ScrollRect scrollRect;
 
     [SerializeField] private GraphicRaycaster raycaster;
     [SerializeField] private EventSystem eventSystem;
@@ -39,7 +40,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    private GameObject itemSelected;
+    private GameObject itemSelected, itemUISelected;
     private GridItem itemSelectedData;
     private void Update()
     {
@@ -58,13 +59,27 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 Debug.Log(results[0].gameObject.name);
                 return;
             }
+            itemUISelected = results[0].gameObject;
             Debug.Log(gridItemUI.gridItem.name);
+            itemUISelected.GetComponent<Image>().color = Color.red;
             itemSelectedData = gridItemUI.gridItem;
+            if(scrollRect != null)
+            {
+                scrollRect.enabled = false;
+            }
         }
         else if(Input.GetMouseButtonUp(0))
         {
+            if(itemUISelected != null)
+            {
+                itemUISelected.GetComponent<Image>().color = new Color32(56, 56, 56, 115);
+            }
             itemSelectedData = null;
             itemSelected = null;
+            if (scrollRect != null)
+            {
+                scrollRect.enabled = true;
+            }
         }
         else
         {
@@ -77,6 +92,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected.GetComponentInChildren<SpriteRenderer>().sprite = itemSelectedData.spriteTemp;
                     itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
                     gridItems.Remove(itemSelectedData);
+                    itemUISelected = null;
                     RendererList();
                 }
             }
