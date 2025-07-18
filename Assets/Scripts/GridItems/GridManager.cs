@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,7 +12,6 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
     [SerializeField] private Transform gridParent;
     [SerializeField] private ScrollRect scrollRect;
-
     [SerializeField] private GraphicRaycaster raycaster;
     [SerializeField] private EventSystem eventSystem;
 
@@ -41,53 +40,49 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    private GameObject itemSelected, itemUISelected;
-    private GridItem itemSelectedData;
+    /* ----- biến cần có ----- */
+    private GridItem draggingData;      // dữ liệu item đang kéo
+    private GameObject spawnedObj;        // obj đã spawn (nếu có)
+    private bool isDragging = false;
+    /* ------------------------ */
+
     private void Update()
     {
+        /* Mouse Down: bắt đầu chọn item trong UI */
         if (Input.GetMouseButtonDown(0))
         {
-            PointerEventData pointerData = new PointerEventData(eventSystem)
-            {
-                position = Input.mousePosition
-            };
+            PointerEventData pd = new PointerEventData(eventSystem) { position = Input.mousePosition };
+            var hits = new List<RaycastResult>();
+            raycaster.Raycast(pd, hits);
 
-            List<RaycastResult> results = new List<RaycastResult>();
-            raycaster.Raycast(pointerData, results);
-            if (results.Count > 0)
+            GridItemUI hitUI = hits.Count > 0 ? hits[0].gameObject.GetComponent<GridItemUI>() : null;
+            if (hitUI)
             {
-                GridItemUI gridItemUI = (results[0]).gameObject.GetComponent<GridItemUI>();
-                if (gridItemUI == null)
-                {
-                    Debug.Log(results[0].gameObject.name);
-                    return;
-                }
-                itemUISelected = results[0].gameObject;
-                Debug.Log(gridItemUI.gridItem.name);
-                itemUISelected.GetComponent<Image>().color = Color.red;
-                itemSelectedData = gridItemUI.gridItem;
-                if (scrollRect != null)
-                {
-                    scrollRect.enabled = false;
-                }
+                draggingData = hitUI.gridItem;
+                isDragging = true;
+                hitUI.GetComponent<Image>().color = Color.red;   // highlight
+                if (scrollRect) scrollRect.enabled = false;
             }
         }
-        else if(Input.GetMouseButtonUp(0))
+
+        /* Mouse Hold: chuột rời UI → spawn obj (nhưng cứ giữ dữ liệu trong list) */
+        if (Input.GetMouseButton(0) && isDragging && spawnedObj == null && !isHovered)
         {
-            if(itemUISelected != null)
-            {
-                itemUISelected.GetComponent<Image>().color = new Color32(56, 56, 56, 115);
-            }
-            itemSelectedData = null;
-            itemSelected = null;
-            if (scrollRect != null)
-            {
-                scrollRect.enabled = true;
-            }
+            spawnedObj = GetItemObject();
+            spawnedObj.SetActive(true);
+            spawnedObj.GetComponentInChildren<SpriteRenderer>().sprite = draggingData.spriteTemp;
+            spawnedObj.transform.GetChild(0).localScale = Vector2.one * draggingData.spriteScale;
+
+            var gio = spawnedObj.AddComponent<GridItemObject>();
+            gio.gridItem = draggingData;
+
+            DragDropManager.instance.SetDrag(spawnedObj);
         }
-        else
+
+        /* Mouse Up: quyết định commit hay hủy */
+        if (Input.GetMouseButtonUp(0) && isDragging)
         {
-            if (!isHovered && itemSelectedData)
+            if (isHovered)
             {
                 if (!itemSelected)
                 {
@@ -104,8 +99,21 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     RendererList();
                 }
             }
+            else
+            {
+                /* ===== COMMIT: thả ngoài UI ===== */
+                gridItems.Remove(draggingData);               // xóa vĩnh viễn
+                RendererList();
+            }
+
+            /* --- reset --- */
+            draggingData = null;
+            spawnedObj = null;
+            isDragging = false;
+            if (scrollRect) scrollRect.enabled = true;
         }
     }
+
 
     private GameObject GetItemObject()
     {
