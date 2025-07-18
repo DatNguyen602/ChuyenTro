@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b26fae6c1fb6843a14ec6cc7767e6a, type: 3}
-  m_Name: Lshape
+  m_Script: {fileID: 11500000, guid: b3c9bdbbaa973f5429ac919626869c06, type: 3}
+  m_Name: L_Data
   m_EditorClassIdentifier: 
-  itemName: LShape
-  size: {x: 2, y: 2}
-  relativeCells:
+  itemSprite: {fileID: 0}
+  boxSize: {x: 3, y: 2}
+  occupiedCells:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
+  - {x: 0, y: 2}
   - {x: 1, y: 0}
-  sprite: {fileID: 3763752930381237044, guid: 8e0b5bebaccfa6244874c8d6a53a974c, type: 3}
