@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4024737002202022415}
   - component: {fileID: 1607084126886297287}
   - component: {fileID: -3030914178164439205}
-  m_Layer: 0
+  - component: {fileID: -2750731131664274300}
+  m_Layer: 8
   m_Name: ItemGridTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6264315004740169606}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1516.8419, y: 651.1018, z: 3.4046607}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -126,12 +127,54 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 1}
-      - {x: -0.95105654, y: 0.30901697}
-      - {x: -0.5877852, y: -0.80901706}
-      - {x: 0.58778536, y: -0.80901694}
-      - {x: 0.9510565, y: 0.30901712}
+    - - {x: 0.535, y: -0.475}
+      - {x: 0.525, y: 0.475}
+      - {x: 1.475, y: 0.475}
+      - {x: 1.475, y: -0.475}
+    - - {x: -1.475, y: -1.475}
+      - {x: -1.475, y: -0.525}
+      - {x: -0.525, y: -0.525}
+      - {x: -0.525, y: -1.475}
+    - - {x: -0.475, y: -0.475}
+      - {x: -0.475, y: 0.475}
+      - {x: 0.475, y: 0.475}
+      - {x: 0.475, y: -0.475}
+    - - {x: -1.475, y: -0.475}
+      - {x: -1.475, y: 0.475}
+      - {x: -0.525, y: 0.475}
+      - {x: -0.525, y: -0.475}
+    - - {x: 0.525, y: -1.475}
+      - {x: 0.525, y: -0.525}
+      - {x: 1.475, y: -0.525}
+      - {x: 1.475, y: -1.475}
   m_UseDelaunayMesh: 0
+--- !u!50 &-2750731131664274300
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6264315004740169606}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7986604193779552176
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7583885141182314312}
   - component: {fileID: 1148783821234589453}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: avatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +250,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -219,49 +262,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &498647567370714561
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7986604193779552176}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.004760742, y: 0.0015869141}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.0095215, y: 0.9968262}
-  m_EdgeRadius: 0

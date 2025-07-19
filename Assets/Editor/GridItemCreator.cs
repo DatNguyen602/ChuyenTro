@@ -58,8 +58,9 @@ public class GridItemCreator : EditorWindow
         GUILayout.Label("Grid", EditorStyles.boldLabel);
         cellSize = Mathf.RoundToInt(EditorGUILayout.Slider(cellSize, 5, 50, GUILayout.MaxWidth(312)));
         GUILayout.EndHorizontal();
-        Rect previewRect = GUILayoutUtility.GetRect(cellSize * gridRadius * 2, cellSize * gridRadius * 2);
+        Rect previewRect = GUILayoutUtility.GetRect(cellSize * gridRadius, cellSize * gridRadius * 2 + cellSize * 2);
         DrawGrid(previewRect);
+        DrawDetailPreview();
         GUILayout.EndVertical();
 
         GUILayout.Space(10);
@@ -181,18 +182,63 @@ public class GridItemCreator : EditorWindow
                 Rect cell = new Rect(pos.x, pos.y, cellSize, cellSize);
                 Color color = (x == 0 || y == 0) ? Color.black : Color.gray;
 
-                Handles.DrawSolidRectangleWithOutline(cell, Color.clear, color);
 
                 Vector2Int cellCoord = new Vector2Int(x, y);
                 if (occupiedCells.Contains(cellCoord))
                     Handles.DrawSolidRectangleWithOutline(cell, new Color(0.3f, 1f, 0.3f, 0.4f), Color.green);
+                else
+                    Handles.DrawSolidRectangleWithOutline(cell, Color.clear, color);
 
                 if (x == 0 && y == 0)
-                    GUI.Label(cell, "0,0", centerLabel);
+                    GUI.Label(cell, "0,0", centerLabel ?? GUI.skin.label);
             }
         }
 
         Handles.EndGUI();
+    }
+
+    private void DrawDetailPreview()
+    {
+        GUILayout.Label("Preview chi tiết", EditorStyles.boldLabel);
+
+        if (sprite != null)
+        {
+            GUILayout.BeginHorizontal();
+
+            // Hiển thị icon sprite
+            GUILayout.Label(AssetPreview.GetAssetPreview(sprite), GUILayout.Width(64), GUILayout.Height(64));
+
+            GUILayout.BeginVertical();
+
+            GUILayout.Label($"Tên: {itemName}");
+            GUILayout.Label($"ID: {id}");
+            GUILayout.Label($"Kích thước: {spriteScale} ô");
+            GUILayout.Label($"Offset (%): {spriteOffsetPercent}");
+
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("Chưa chọn sprite.", MessageType.Info);
+        }
+
+        GUILayout.Space(5);
+        GUILayout.Label("Vị trí đã chọn:", EditorStyles.miniBoldLabel);
+
+        if (occupiedCells.Count == 0)
+        {
+            GUILayout.Label("Không có ô nào được chọn.");
+        }
+        else
+        {
+            GUILayout.BeginVertical("box");
+            foreach (var cell in occupiedCells)
+            {
+                GUILayout.Label($"- ({cell.x}, {cell.y})");
+            }
+            GUILayout.EndVertical();
+        }
     }
 
     private void CreateItemAsset()

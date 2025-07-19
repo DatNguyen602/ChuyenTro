@@ -20,10 +20,10 @@ public class DragDropManager : MonoBehaviour
         foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
         {
             Vector2[] square = new Vector2[] {
-                pos + new Vector2(-0.5f, -0.5f),
-                pos + new Vector2(-0.5f,  0.5f),
-                pos + new Vector2( 0.5f,  0.5f),
-                pos + new Vector2( 0.5f, -0.5f)
+                pos + new Vector2(-0.475f, -0.475f),
+                pos + new Vector2(-0.475f,  0.475f),
+                pos + new Vector2( 0.475f,  0.475f),
+                pos + new Vector2( 0.475f, -0.475f)
             };
             paths.Add(square);
         }
@@ -56,6 +56,18 @@ public class DragDropManager : MonoBehaviour
     {
         if(Input.GetMouseButtonUp(0))
         {
+            if (objectDrag != null)
+            {
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Container.Instance.SetState(
+                        new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
+                        objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells);
+                }
+                objectDrag.GetComponent<PolygonCollider2D>().enabled = true;
+            }
             objectDrag = null;
         }
         DragAction();
@@ -65,11 +77,14 @@ public class DragDropManager : MonoBehaviour
     {
         if (objectDrag == null)
         {
-            if (Input.GetMouseButtonDown(0))
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            if (hit.collider != null && hit.collider.gameObject.tag == "ElConttainer" &&
+                Container.Instance.CheckState(
+                    new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
+                    objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells)
+                )
             {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
                 if (hit.collider != null && hit.collider.gameObject.GetComponent<GridItemObject>())
                 {
                     SetDrag(hit.collider.gameObject);
@@ -78,9 +93,26 @@ public class DragDropManager : MonoBehaviour
         }
         else
         {
+            objectDrag.GetComponent<PolygonCollider2D>().enabled = false;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
-            objectDrag.transform.position = mousePos;
+
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (hit.collider != null && hit.collider.gameObject.tag == "ElConttainer" &&
+                Container.Instance.CheckState(
+                    new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)), 
+                    objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells)
+                )
+            {
+                objectDrag.transform.position = hit.collider.transform.position;
+                objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.green;
+            }
+            else
+            {
+                objectDrag.transform.position = mousePos;
+                objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.red;
+            }
         }
     }
 }
