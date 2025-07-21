@@ -95,8 +95,11 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected = GetItemObject();
                     itemSelected.SetActive(true);
                     itemSelected.GetComponentInChildren<SpriteRenderer>().sprite = itemSelectedData.spriteTemp;
-                    itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
-                    itemSelected.transform.GetChild(0).localPosition = (Vector3) (itemSelectedData.spriteOffsetPercent);
+
+                    itemSelected.transform.GetChild(0).localScale = Vector3.one * itemSelectedData.spriteScale;
+
+                    itemSelected.transform.GetChild(0).localPosition = itemSelectedData.spriteOffsetPercent;
+
                     gridItems.Remove(itemSelectedData);
                     GridItemObject gridItemObject = itemSelected.GetComponent<GridItemObject>() ?? itemSelected.AddComponent<GridItemObject>();
                     gridItemObject.gridItem = itemSelectedData;
@@ -159,6 +162,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (!item.activeSelf)
             {
                 item.SetActive(true);
+                item.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 return item;
             }
         }
@@ -182,6 +186,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             GameObject item = Instantiate(gridItemPrefab, gridParent);
             item.transform.GetChild(0).GetComponent<Image>().sprite = i.spriteTemp;
             item.GetComponentInChildren<TextMeshProUGUI>().text = i.name;
+            i.occupiedCellsStart = new List<Vector2Int>(i.occupiedCells);
 
             GridItemUI gridItemUI = item.AddComponent<GridItemUI>();
             gridItemUI.gridItem = i;
@@ -192,7 +197,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if(selectedObject != null)
         {
-            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCells, false);
+            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, false);
             gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
             RendererList();
             selectedObject.SetActive(false);
@@ -201,6 +206,74 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             itemSelected = null;
         }
     }
+    public void RotateSelectedClockwise()
+    {
+        RotateSelectedItem(1);
+    }
+
+    public void RotateSelectedCounterClockwise()
+    {
+        RotateSelectedItem(-1);
+    }
+
+    public void RotateSelectedItem(int direction)
+    {
+        if (selectedObject == null)
+        {
+            Debug.LogWarning("Không có object được chọn.");
+            return;
+        }
+
+        GridItemObject gridItemObj = selectedObject.GetComponent<GridItemObject>();
+        if (gridItemObj == null || gridItemObj.gridItem == null)
+        {
+            Debug.LogWarning("Không tìm thấy GridItemObject.");
+            return;
+        }
+
+        GridItem gridItem = gridItemObj.gridItem;
+
+        // Xoay các cell quanh tâm (0,0)
+        List<Vector2Int> oldCells = new List<Vector2Int>(gridItem.occupiedCellsStart);
+        List<Vector2Int> newCells = new List<Vector2Int>();
+        foreach (Vector2Int cell in oldCells)
+        {
+            if (direction > 0)
+                newCells.Add(new Vector2Int(-cell.y, cell.x)); // Xoay thuận
+            else
+                newCells.Add(new Vector2Int(cell.y, -cell.x)); // Xoay ngược
+        }
+
+        // Lấy vị trí trong grid
+        Vector2 pos = selectedObject.transform.position;
+        Vector2Int gridPos = Container.Instance.WorldToCell(pos);
+
+        // Xóa state cũ tạm thời
+        Container.Instance.SetState(pos, oldCells, false);
+
+        // Kiểm tra state mới
+        if (!Container.Instance.CheckState(pos, newCells))
+        {
+            Debug.Log("Không thể xoay vì va chạm.");
+            Container.Instance.SetState(pos, oldCells, true); // Khôi phục lại
+            return;
+        }
+
+        // Cập nhật occupiedCells
+        gridItem.occupiedCellsStart = newCells;
+
+        // Xoay sprite (góc mới theo từng lần 90 độ)
+        float currentZ = selectedObject.transform.localEulerAngles.z;
+        float newZ = currentZ + 90f* direction;
+        selectedObject.transform.localRotation = Quaternion.Euler(0, 0, newZ);
+
+        // Đặt lại state mới
+        Container.Instance.SetState(pos, newCells, true);
+
+        Debug.Log("Xoay thành công.");
+    }
+
+
 }
 
 public class GridItemUI : MonoBehaviour
@@ -208,19 +281,43 @@ public class GridItemUI : MonoBehaviour
     public GridItem gridItem;
 }
 
-public class GridItemObject : MonoBehaviour, IPointerClickHandler
+public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHandler
 {
     public GridItem gridItem;
     public bool canDrop;
     public delegate void ActionSelect(GameObject gameObject);
     public ActionSelect OnSelect;
-
+    private Vector3 startPosition;
     public void OnPointerClick(PointerEventData eventData)
     {
         if(OnSelect != null)
         {
             OnSelect?.Invoke(gameObject);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        startPosition = transform.position;
+        DragDropManager.instance.SetDrag(gameObject);
+        DragDropManager.instance.EndDrag =
+            (objDrag, canDrop) =>
+            {
+                Debug.Log("End Drag");
+                if (canDrop)
+                {
+                    Container.Instance.SetState(
+                        new Vector2Int(Mathf.FloorToInt(startPosition.x), Mathf.FloorToInt(startPosition.y)),
+                        gridItem.occupiedCells, false);
+                    Container.Instance.SetState(transform.position, gridItem.occupiedCellsStart, true);
+                }
+                else
+                {
+                    transform.position = startPosition;
+                    GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                    OnSelect?.Invoke(gameObject);
+                }
+            };
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)

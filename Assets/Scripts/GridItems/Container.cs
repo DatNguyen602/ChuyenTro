@@ -93,4 +93,12 @@ public class Container : MonoBehaviour
             transform.GetChild(setX * size.y + setY).GetComponent<SpriteRenderer>().color = state ? Color.gray : Color.white;
         }
     }
+    public Vector2Int WorldToCell(Vector2 pos)
+    {
+        return new Vector2Int(
+            Mathf.RoundToInt(pos.x + (size.x / 2)),
+            Mathf.RoundToInt(pos.y + (size.y / 2))
+        );
+    }
+
 }

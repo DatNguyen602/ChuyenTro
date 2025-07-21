@@ -19,6 +19,11 @@ public class DragDropManager : MonoBehaviour
 
     public void SetDrag(GameObject obj)
     {
+        if(obj == null)
+        {
+            objectDrag = null;
+            return;
+        }
         if (!objectDrag) objectDrag = obj;
 
         GridItemObject gridItemObject = objectDrag.GetComponent<GridItemObject>();
@@ -26,7 +31,7 @@ public class DragDropManager : MonoBehaviour
 
         List<Vector2[]> paths = new List<Vector2[]>();
 
-        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
+        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCellsStart)
         {
             Vector2[] square = new Vector2[] {
                 pos + new Vector2(-0.5f, -0.5f),
