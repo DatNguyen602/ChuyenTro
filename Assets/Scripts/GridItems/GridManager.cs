@@ -32,6 +32,8 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         isHovered = false;
     }
 
+    private GameObject selectedObject;
+
     void Start()
     {
         RendererList();
@@ -99,9 +101,44 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
                     itemSelected.transform.GetChild(0).localPosition = (Vector3) (itemSelectedData.spriteOffsetPercent);
                     gridItems.Remove(itemSelectedData);
-                    GridItemObject gridItemObject = itemSelected.AddComponent<GridItemObject>();
+                    GridItemObject gridItemObject = itemSelected.GetComponent<GridItemObject>() ?? itemSelected.AddComponent<GridItemObject>();
                     gridItemObject.gridItem = itemSelectedData;
+                    gridItemObject.OnSelect = (GameObject obj) =>
+                    {
+                        if (selectedObject != null)
+                        {
+                            selectedObject = null;
+                            obj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                        }
+                        else
+                        {
+                            selectedObject = obj;
+                            obj.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+                        }
+                    };
                     DragDropManager.instance.SetDrag(itemSelected);
+                    DragDropManager.instance.EndDrag = (GameObject obj, bool canDrop) =>
+                    {
+                        Debug.Log("End Drag");
+                        if (!canDrop)
+                        {
+                            if (itemUISelected != null)
+                            {
+                                itemUISelected.GetComponent<Image>().color = new Color32(56, 56, 56, 115);
+                            }
+                            gridItems.Add(obj.GetComponent<GridItemObject>().gridItem);
+                            RendererList();
+                            obj.SetActive(false);
+                            itemSelectedData = null;
+                            itemSelected = null;
+                            if (scrollRect != null)
+                            {
+                                scrollRect.enabled = true;
+                            }
+                        }
+                        DragDropManager.instance.EndDrag = null;
+                    };
+
                     itemUISelected = null;
                     RendererList();
                 }
@@ -144,6 +181,20 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             gridItemUI.gridItem = i;
         }
     }
+
+    public void retunObjtoList()
+    {
+        if(selectedObject != null)
+        {
+            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCells, false);
+            gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
+            RendererList();
+            selectedObject.SetActive(false);
+            selectedObject = null;
+            itemSelectedData = null;
+            itemSelected = null;
+        }
+    }
 }
 
 public class GridItemUI : MonoBehaviour
@@ -151,10 +202,20 @@ public class GridItemUI : MonoBehaviour
     public GridItem gridItem;
 }
 
-public class GridItemObject : MonoBehaviour
+public class GridItemObject : MonoBehaviour, IPointerClickHandler
 {
     public GridItem gridItem;
     public bool canDrop;
+    public delegate void ActionSelect(GameObject gameObject);
+    public ActionSelect OnSelect;
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(OnSelect != null)
+        {
+            OnSelect?.Invoke(gameObject);
+        }
+    }
 
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
