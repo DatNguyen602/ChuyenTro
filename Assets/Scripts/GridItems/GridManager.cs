@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -107,8 +105,17 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     {
                         if (selectedObject != null)
                         {
-                            selectedObject = null;
-                            obj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                            if (obj != selectedObject)
+                            {
+                                selectedObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                                selectedObject = obj;
+                                obj.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+                            }
+                            else
+                            {
+                                selectedObject = null;
+                                obj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                            }
                         }
                         else
                         {
