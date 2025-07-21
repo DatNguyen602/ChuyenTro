@@ -146,6 +146,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                             }
                         }
                         DragDropManager.instance.EndDrag = null;
+                        return canDrop;
                     };
 
                     itemUISelected = null;
@@ -287,52 +288,42 @@ public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHa
     public bool canDrop;
     public delegate void ActionSelect(GameObject gameObject);
     public ActionSelect OnSelect;
-    private Vector3 startPosition;
+    private Vector3 startPosition, currentMousePos;
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(OnSelect != null)
-        {
-            OnSelect?.Invoke(gameObject);
-        }
+        //if(OnSelect != null)
+        //{
+        //    OnSelect?.Invoke(gameObject);
+        //}
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         startPosition = transform.position;
+        DragDropManager.instance.GetInput(out currentMousePos);
         DragDropManager.instance.SetDrag(gameObject);
+        Container.Instance.SetState(
+                new Vector2Int(Mathf.FloorToInt(startPosition.x), Mathf.FloorToInt(startPosition.y)),
+                gridItem.occupiedCellsStart, false);
+
         DragDropManager.instance.EndDrag =
             (objDrag, canDrop) =>
             {
-                Debug.Log("End Drag");
-                if (canDrop)
+                Vector3 mousePos;
+                DragDropManager.instance.GetInput(out mousePos);
+                if (Vector3.Distance(mousePos, currentMousePos) < 5f)
+                {
+                    canDrop = false;
+                }
+                if (!canDrop)
                 {
                     Container.Instance.SetState(
                         new Vector2Int(Mathf.FloorToInt(startPosition.x), Mathf.FloorToInt(startPosition.y)),
-                        gridItem.occupiedCells, false);
-                    Container.Instance.SetState(transform.position, gridItem.occupiedCellsStart, true);
-                }
-                else
-                {
+                        gridItem.occupiedCellsStart);
                     transform.position = startPosition;
-                    GetComponentInChildren<SpriteRenderer>().color = Color.white;
-                    OnSelect?.Invoke(gameObject);
                 }
+                OnSelect?.Invoke(gameObject);
+                return canDrop;
             };
     }
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if(collision.gameObject.tag != "GridItemObject")
-    //    {
-    //        canDrop = false;
-    //    }
-    //}
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag != "GridItemObject")
-    //    {
-    //        canDrop = true;
-    //    }
-    //}
 }

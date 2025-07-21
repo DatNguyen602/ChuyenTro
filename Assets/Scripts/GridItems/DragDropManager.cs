@@ -6,7 +6,7 @@ public class DragDropManager : MonoBehaviour
     public static DragDropManager instance;
 
     private GameObject objectDrag;
-    public delegate void EndDragAction(GameObject gameObject, bool canDrag);
+    public delegate bool EndDragAction(GameObject gameObject, bool canDrag);
     public EndDragAction EndDrag;
 
     private void Awake()
@@ -17,6 +17,7 @@ public class DragDropManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private float timeSinceLastInput = 0f;
     public void SetDrag(GameObject obj)
     {
         if(obj == null)
@@ -31,7 +32,7 @@ public class DragDropManager : MonoBehaviour
 
         List<Vector2[]> paths = new List<Vector2[]>();
 
-        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCellsStart)
+        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
         {
             Vector2[] square = new Vector2[] {
                 pos + new Vector2(-0.5f, -0.5f),
@@ -47,6 +48,7 @@ public class DragDropManager : MonoBehaviour
         {
             poly.SetPath(i, paths[i]);
         }
+        timeSinceLastInput = Time.time;
     }
 
     void Update()
@@ -66,16 +68,16 @@ public class DragDropManager : MonoBehaviour
             }
 
             bool canDrag = Container.Instance.CheckState(posCheck,
-                objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells);
+                objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCellsStart);
 
-            EndDrag?.Invoke(objectDrag, canDrag);
+            canDrag = EndDrag.Invoke(objectDrag, canDrag);
 
             if (canDrag)
             {
                 if (hit.collider?.gameObject)
                     Container.Instance.SetState(
                         new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
-                        objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells);
+                        objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCellsStart);
                 objectDrag.GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
 
@@ -101,7 +103,7 @@ public class DragDropManager : MonoBehaviour
                 GridItemObject gridObj = hit.collider.gameObject.GetComponent<GridItemObject>();
                 if (gridObj != null && Container.Instance.CheckState(
                         new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
-                        gridObj.gridItem.occupiedCells))
+                        gridObj.gridItem.occupiedCellsStart))
                 {
                     SetDrag(hit.collider.gameObject);
                 }
@@ -109,22 +111,25 @@ public class DragDropManager : MonoBehaviour
         }
         else
         {
-            objectDrag.GetComponent<PolygonCollider2D>().enabled = false;
-
-            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-
-            if (hit.collider != null && hit.collider.gameObject.CompareTag("ElConttainer") &&
-                Container.Instance.CheckState(
-                    new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
-                    objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCells))
+            if (Time.time - timeSinceLastInput > 0.25f)
             {
-                objectDrag.transform.position = hit.collider.transform.position;
-                objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.green;
-            }
-            else
-            {
-                objectDrag.transform.position = worldPos;
-                objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.red;
+                objectDrag.GetComponent<PolygonCollider2D>().enabled = false;
+
+                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+
+                if (hit.collider != null && hit.collider.gameObject.CompareTag("ElConttainer") &&
+                    Container.Instance.CheckState(
+                        new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
+                        objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCellsStart))
+                {
+                    objectDrag.transform.position = hit.collider.transform.position;
+                    objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.green;
+                }
+                else
+                {
+                    objectDrag.transform.position = worldPos;
+                    objectDrag.GetComponentsInChildren<SpriteRenderer>()[0].color = Color.red;
+                }
             }
         }
     }
@@ -132,7 +137,7 @@ public class DragDropManager : MonoBehaviour
     /// <summary>
     /// Xử lý đầu vào từ chuột hoặc cảm ứng. Trả về tọa độ màn hình & true nếu vừa nhả.
     /// </summary>
-    private bool GetInput(out Vector3 inputPos)
+    public bool GetInput(out Vector3 inputPos)
     {
         inputPos = Vector3.zero;
 
