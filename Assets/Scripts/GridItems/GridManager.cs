@@ -163,6 +163,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (!item.activeSelf)
             {
                 item.SetActive(true);
+                item.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 return item;
             }
         }
@@ -206,7 +207,17 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             itemSelected = null;
         }
     }
-    public void RotateSelectedItem()
+    public void RotateSelectedClockwise()
+    {
+        RotateSelectedItem(1);
+    }
+
+    public void RotateSelectedCounterClockwise()
+    {
+        RotateSelectedItem(-1);
+    }
+
+    public void RotateSelectedItem(int direction)
     {
         if (selectedObject == null)
         {
@@ -228,7 +239,10 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         List<Vector2Int> newCells = new List<Vector2Int>();
         foreach (Vector2Int cell in oldCells)
         {
-            newCells.Add(new Vector2Int(-cell.y, cell.x)); // Xoay 90 độ
+            if (direction > 0)
+                newCells.Add(new Vector2Int(-cell.y, cell.x)); // Xoay thuận
+            else
+                newCells.Add(new Vector2Int(cell.y, -cell.x)); // Xoay ngược
         }
 
         // Lấy vị trí trong grid
@@ -251,7 +265,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // Xoay sprite (góc mới theo từng lần 90 độ)
         float currentZ = selectedObject.transform.localEulerAngles.z;
-        float newZ = currentZ + 90f;
+        float newZ = currentZ + 90f* direction;
         selectedObject.transform.localRotation = Quaternion.Euler(0, 0, newZ);
 
         // Đặt lại state mới
@@ -268,19 +282,42 @@ public class GridItemUI : MonoBehaviour
     public GridItem gridItem;
 }
 
-public class GridItemObject : MonoBehaviour, IPointerClickHandler
+public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHandler, IPointerUpHandler
 {
     public GridItem gridItem;
     public bool canDrop;
     public delegate void ActionSelect(GameObject gameObject);
     public ActionSelect OnSelect;
-
+    private Vector3 startPosition;
     public void OnPointerClick(PointerEventData eventData)
     {
         if(OnSelect != null)
         {
             OnSelect?.Invoke(gameObject);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        startPosition = transform.position;
+        DragDropManager.instance.SetDrag(gameObject);
+        DragDropManager.instance.EndDrag =
+            (objDrag, canDrop) =>
+            {
+                if (canDrop)
+                {
+                    Container.Instance.SetState(transform.position, gridItem.occupiedCellsStart, true);
+                }
+                else
+                {
+                    objDrag.transform.position = startPosition;
+                }
+            };
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        DragDropManager.instance.SetDrag(null);
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)
