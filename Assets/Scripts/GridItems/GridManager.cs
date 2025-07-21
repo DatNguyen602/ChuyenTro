@@ -65,7 +65,6 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     return;
                 }
                 itemUISelected = results[0].gameObject;
-                Debug.Log(gridItemUI.gridItem.name);
                 itemUISelected.GetComponent<Image>().color = Color.red;
                 itemSelectedData = gridItemUI.gridItem;
                 if (scrollRect != null)
@@ -109,7 +108,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                             {
                                 selectedObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
                                 selectedObject = obj;
-                                obj.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+                                selectedObject.GetComponentInChildren<SpriteRenderer>().color = Color.green;
                             }
                             else
                             {

@@ -4,6 +4,8 @@ public class GamePlayManager : MonoBehaviour
 {
     public static GamePlayManager instance;
 
+
+
     private void Awake()
     {
         if (instance == null)
