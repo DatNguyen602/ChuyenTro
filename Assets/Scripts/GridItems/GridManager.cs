@@ -282,7 +282,7 @@ public class GridItemUI : MonoBehaviour
     public GridItem gridItem;
 }
 
-public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHandler, IPointerUpHandler
+public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHandler
 {
     public GridItem gridItem;
     public bool canDrop;
@@ -304,20 +304,21 @@ public class GridItemObject : MonoBehaviour, IPointerClickHandler,IPointerDownHa
         DragDropManager.instance.EndDrag =
             (objDrag, canDrop) =>
             {
+                Debug.Log("End Drag");
                 if (canDrop)
                 {
+                    Container.Instance.SetState(
+                        new Vector2Int(Mathf.FloorToInt(startPosition.x), Mathf.FloorToInt(startPosition.y)),
+                        gridItem.occupiedCells, false);
                     Container.Instance.SetState(transform.position, gridItem.occupiedCellsStart, true);
                 }
                 else
                 {
-                    objDrag.transform.position = startPosition;
+                    transform.position = startPosition;
+                    GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                    OnSelect?.Invoke(gameObject);
                 }
             };
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        DragDropManager.instance.SetDrag(null);
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)
