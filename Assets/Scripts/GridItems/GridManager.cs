@@ -98,8 +98,11 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     itemSelected = GetItemObject();
                     itemSelected.SetActive(true);
                     itemSelected.GetComponentInChildren<SpriteRenderer>().sprite = itemSelectedData.spriteTemp;
-                    itemSelected.transform.GetChild(0).localScale = new Vector2(itemSelectedData.spriteScale, itemSelectedData.spriteScale);
-                    itemSelected.transform.GetChild(0).localPosition = (Vector3) (itemSelectedData.spriteOffsetPercent);
+
+                    itemSelected.transform.GetChild(0).localScale = Vector3.one * itemSelectedData.spriteScale;
+
+                    itemSelected.transform.GetChild(0).localPosition = itemSelectedData.spriteOffsetPercent;
+
                     gridItems.Remove(itemSelectedData);
                     GridItemObject gridItemObject = itemSelected.GetComponent<GridItemObject>() ?? itemSelected.AddComponent<GridItemObject>();
                     gridItemObject.gridItem = itemSelectedData;
@@ -176,6 +179,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             GameObject item = Instantiate(gridItemPrefab, gridParent);
             item.transform.GetChild(0).GetComponent<Image>().sprite = i.spriteTemp;
             item.GetComponentInChildren<TextMeshProUGUI>().text = i.name;
+            i.occupiedCellsStart = new List<Vector2Int>(i.occupiedCells);
 
             GridItemUI gridItemUI = item.AddComponent<GridItemUI>();
             gridItemUI.gridItem = i;
@@ -186,7 +190,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if(selectedObject != null)
         {
-            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCells, false);
+            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, false);
             gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
             RendererList();
             selectedObject.SetActive(false);
@@ -195,6 +199,61 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             itemSelected = null;
         }
     }
+    public void RotateSelectedItem()
+    {
+        if (selectedObject == null)
+        {
+            Debug.LogWarning("Không có object được chọn.");
+            return;
+        }
+
+        GridItemObject gridItemObj = selectedObject.GetComponent<GridItemObject>();
+        if (gridItemObj == null || gridItemObj.gridItem == null)
+        {
+            Debug.LogWarning("Không tìm thấy GridItemObject.");
+            return;
+        }
+
+        GridItem gridItem = gridItemObj.gridItem;
+
+        // Xoay các cell quanh tâm (0,0)
+        List<Vector2Int> oldCells = new List<Vector2Int>(gridItem.occupiedCellsStart);
+        List<Vector2Int> newCells = new List<Vector2Int>();
+        foreach (Vector2Int cell in oldCells)
+        {
+            newCells.Add(new Vector2Int(-cell.y, cell.x)); // Xoay 90 độ
+        }
+
+        // Lấy vị trí trong grid
+        Vector2 pos = selectedObject.transform.position;
+        Vector2Int gridPos = Container.Instance.WorldToCell(pos);
+
+        // Xóa state cũ tạm thời
+        Container.Instance.SetState(pos, oldCells, false);
+
+        // Kiểm tra state mới
+        if (!Container.Instance.CheckState(pos, newCells))
+        {
+            Debug.Log("Không thể xoay vì va chạm.");
+            Container.Instance.SetState(pos, oldCells, true); // Khôi phục lại
+            return;
+        }
+
+        // Cập nhật occupiedCells
+        gridItem.occupiedCellsStart = newCells;
+
+        // Xoay sprite (góc mới theo từng lần 90 độ)
+        float currentZ = selectedObject.transform.localEulerAngles.z;
+        float newZ = currentZ + 90f;
+        selectedObject.transform.localRotation = Quaternion.Euler(0, 0, newZ);
+
+        // Đặt lại state mới
+        Container.Instance.SetState(pos, newCells, true);
+
+        Debug.Log("Xoay thành công.");
+    }
+
+
 }
 
 public class GridItemUI : MonoBehaviour

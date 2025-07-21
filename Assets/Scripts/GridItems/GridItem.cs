@@ -1,5 +1,5 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "GridItem", menuName = "Grid/GridItem")]
 public class GridItem : ScriptableObject
@@ -10,4 +10,7 @@ public class GridItem : ScriptableObject
     public float spriteScale;
     public Vector2 spriteOffsetPercent;
     public List<Vector2Int> occupiedCells;
+
+    public List<Vector2Int> occupiedCellsStart;
+
 }

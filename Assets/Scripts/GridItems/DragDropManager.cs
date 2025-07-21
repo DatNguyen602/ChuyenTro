@@ -26,7 +26,7 @@ public class DragDropManager : MonoBehaviour
 
         List<Vector2[]> paths = new List<Vector2[]>();
 
-        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
+        foreach (Vector2 pos in gridItemObject.gridItem.occupiedCellsStart)
         {
             Vector2[] square = new Vector2[] {
                 pos + new Vector2(-0.475f, -0.475f),
