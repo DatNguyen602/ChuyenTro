@@ -77,7 +77,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             if(itemUISelected != null)
             {
-                itemUISelected.GetComponent<Image>().color = new Color32(56, 56, 56, 115);
+                itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
             }
             itemSelectedData = null;
             itemSelected = null;
@@ -124,8 +124,12 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                             selectedObject = obj;
                             obj.GetComponentInChildren<SpriteRenderer>().color = Color.green;
                         }
+                        ManagerUI.instance.itemControlBtns.SetActive(selectedObject);
                     };
                     DragDropManager.instance.SetDrag(itemSelected);
+                    Vector3 inputPosition;
+                    bool released = DragDropManager.instance.GetInput(out inputPosition);
+                    itemSelected.transform.position = inputPosition;
                     DragDropManager.instance.EndDrag = (GameObject obj, bool canDrop) =>
                     {
                         Debug.Log("End Drag");
@@ -133,7 +137,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                         {
                             if (itemUISelected != null)
                             {
-                                itemUISelected.GetComponent<Image>().color = new Color32(56, 56, 56, 115);
+                                itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
                             }
                             gridItems.Add(obj.GetComponent<GridItemObject>().gridItem);
                             RendererList();

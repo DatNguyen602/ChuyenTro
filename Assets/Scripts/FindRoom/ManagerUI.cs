@@ -6,6 +6,7 @@ public class ManagerUI : MonoBehaviour
     public static ManagerUI instance { get; private set; }
 
     public TextMeshProUGUI roomDataInfor;
+    public GameObject itemControlBtns;
 
     private void Awake()
     {
