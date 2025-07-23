@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework.Interfaces;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -58,6 +60,10 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             raycaster.Raycast(pointerData, results);
             if (results.Count > 0)
             {
+                if (itemUISelected != null)
+                {
+                    itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
+                }
                 GridItemUI gridItemUI = (results[0]).gameObject.GetComponent<GridItemUI>();
                 if (gridItemUI == null)
                 {
@@ -75,7 +81,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if(itemUISelected != null)
+            if(itemUISelected != null&& itemSelected!=null)
             {
                 itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
             }

@@ -12,5 +12,6 @@ public class GridItem : ScriptableObject
     public List<Vector2Int> occupiedCells;
 
     public List<Vector2Int> occupiedCellsStart;
-
+    public int price;
+    public float brokenRate; // 0.0 - 1.0
 }
