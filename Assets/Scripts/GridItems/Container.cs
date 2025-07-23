@@ -53,6 +53,8 @@ public class Container : MonoBehaviour
                 square.transform.localPosition = new Vector3(posX, posY, 0);
             }
         }
+
+        Camera.main.orthographicSize = size.x + 2;
     }
 
     public bool CheckState(Vector2 pos, List<Vector2Int> occupiedCells)
