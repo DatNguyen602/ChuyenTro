@@ -35,10 +35,10 @@ public class DragDropManager : MonoBehaviour
         foreach (Vector2 pos in gridItemObject.gridItem.occupiedCells)
         {
             Vector2[] square = new Vector2[] {
-                pos + new Vector2(-0.5f, -0.5f),
-                pos + new Vector2(-0.5f,  0.5f),
-                pos + new Vector2( 0.5f,  0.5f),
-                pos + new Vector2( 0.5f, -0.5f)
+                pos + new Vector2(-0.499f, -0.499f),
+                pos + new Vector2(-0.499f,  0.499f),
+                pos + new Vector2( 0.499f,  0.499f),
+                pos + new Vector2( 0.499f, -0.499f)
             };
             paths.Add(square);
         }
