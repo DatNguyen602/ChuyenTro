@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -43,7 +45,12 @@ public class HomeCtrl : MonoBehaviour
     private float timer = 0.0f;
     public void LoadingScene(string sceneName)
     {
-        timer = 5.0f;
+        StartCoroutine(LoadAsyn(sceneName));
+    }
+
+    private IEnumerator LoadAsyn(string sceneName)
+    {
+        timer = 2.0f;
         AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName);
         if (LoadingUI) LoadingUI.SetActive(true);
         if (scene != null)
@@ -55,11 +62,12 @@ public class HomeCtrl : MonoBehaviour
                 {
                     scene.allowSceneActivation = true;
                     //if (LoadingUI) LoadingUI.SetActive(false);
-                    return;
+                    break;
                 }
                 else
                 {
                     timer -= Time.deltaTime;
+                    yield return null;
                 }
             }
         }
