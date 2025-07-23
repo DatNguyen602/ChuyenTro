@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,7 @@ public class GamePlayManager : MonoBehaviour
     public static GamePlayManager instance;
 
     [SerializeField] private List<GameObject> gameObjectsToManage;
-    [SerializeField] private long startMoney = 3000000;
+
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
 
     private float timerInPlay = 0f;
@@ -16,12 +17,24 @@ public class GamePlayManager : MonoBehaviour
         get { return timerInPlay; }
         set { timerInPlay = value; }
     }
-    private long money = 0;
+    [Header("Player Stats")]
+    [SerializeField] private long money =3000000;
+    [SerializeField] private int stress = 0;   // 0 –10
+    [SerializeField] private int emotion = 5;   // 0 –10
+    [SerializeField] private int comfort = 20;  // 0 –100
+    [SerializeField] private int relation = 0;  // 0 –100 (tuỳ NPC)
+
+    /*–  2.  Thuộc tính public (đọc/ghi)  –*/
     public long Money
     {
-        get { return money; }
-        set { money = value; }
+        get => money;
+        set => money = System.Math.Max(0, value);
     }
+
+    public int Stress { get => stress; set { stress = Mathf.Clamp(value, 0, 10); } }
+    public int Emotion { get => emotion; set { emotion = Mathf.Clamp(value, 0, 10); } }
+    public int Comfort { get => comfort; set { comfort = Mathf.Clamp(value, 0, 100); } }
+    public int Relation { get => relation; set { relation = Mathf.Clamp(value, 0, 100); } }
 
     private RoomData roomSelected;
     public RoomData RoomSelected
@@ -69,4 +82,9 @@ public class GamePlayManager : MonoBehaviour
         RoomSetup,       // Sắp xếp đồ đạc trong phòng
         LivingSummary    // Tổng kết sau khi ổn định
     }
+    public void AddMoney(long amount) => Money += amount;
+    public void AddStress(int amount) => Stress += amount;
+    public void AddEmotion(int amount) => Emotion += amount;
+    public void AddComfort(int amount) => Comfort += amount;
+    public void AddRelation(int amount) => Relation += amount;
 }
