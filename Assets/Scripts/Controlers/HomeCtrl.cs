@@ -22,16 +22,6 @@ public class HomeCtrl : MonoBehaviour
                 }
             }
         }
-        if(btnCtrls)
-        {
-            foreach (Transform child in btnCtrls)
-            {
-                if (child.gameObject.activeSelf)
-                {
-                    child.GetComponent<Image>().color = Color.white;
-                }
-            }
-        }
     }
 
     public void SetSelectBtn(Image img)
