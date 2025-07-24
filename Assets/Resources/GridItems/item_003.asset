@@ -14,11 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: New Item
   id: item_003
-  sprite: {fileID: -2063001847, guid: 1de2f37c859ab48489aba48cd19a348d, type: 3}
+  sprite: {fileID: -256682248, guid: d09d86331f9edf74ebc6d94fee1d1bbf, type: 3}
   spriteTemp: {fileID: 0}
   spriteScale: 2.62
   spriteOffsetPercent: {x: 0, y: -0.5}
   occupiedCells:
+  - {x: 0, y: 0}
+  - {x: -1, y: 0}
+  - {x: -1, y: -1}
+  - {x: 1, y: 0}
+  - {x: 1, y: -1}
+  occupiedCellsStart:
   - {x: 0, y: 0}
   - {x: -1, y: 0}
   - {x: -1, y: -1}

@@ -1664,6 +1664,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomDataInfor: {fileID: 0}
   itemControlBtns: {fileID: 1262495648}
+  Rote1: {fileID: 0}
+  Rote2: {fileID: 0}
 --- !u!1 &1179150537
 GameObject:
   m_ObjectHideFlags: 0

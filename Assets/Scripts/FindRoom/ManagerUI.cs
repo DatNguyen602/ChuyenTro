@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManagerUI : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class ManagerUI : MonoBehaviour
 
     public TextMeshProUGUI roomDataInfor;
     public GameObject itemControlBtns;
+    public Button Rote1, Rote2;
 
     private void Awake()
     {
