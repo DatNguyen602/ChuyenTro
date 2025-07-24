@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class BuyAndSell : MonoBehaviour
 {
@@ -12,9 +13,17 @@ public class BuyAndSell : MonoBehaviour
     [SerializeField] private Transform ParentBuy;
     void Start()
     {
-        for (int i = 0; i < itemsToSell.Count; i++)
+        foreach(var i in itemsToSell)//for (int i = 0; i < itemsToSell.Count; i++)
         {
-            GamePlayManager.instance.RendererList(itemsToSell[i], ParentSell, i < ParentSell.childCount ? ParentSell.GetChild(i).gameObject : null);
+            GameObject temp = GamePlayManager.instance.RendererList(i, ParentSell, itemsToSell.IndexOf(i) < ParentSell.childCount ? ParentSell.GetChild(itemsToSell.IndexOf(i)).gameObject : null);
+
+            Button SelectButton = temp.GetComponent<Button>() ?? temp.AddComponent<Button>();
+            SelectButton.onClick.RemoveAllListeners();
+            SelectButton.onClick.AddListener(() =>
+            {
+                Debug.Log(i.id);
+                Debug.Log(i.price);
+            });
         }
     }
 }

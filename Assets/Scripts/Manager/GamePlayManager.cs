@@ -89,7 +89,7 @@ public class GamePlayManager : MonoBehaviour
     public void AddEmotion(int amount) => Emotion += amount;
     public void AddComfort(int amount) => Comfort += amount;
     public void AddRelation(int amount) => Relation += amount;
-    public void RendererList(GridItem i, Transform Parent, GameObject item = null)
+    public GameObject RendererList(GridItem i, Transform Parent, GameObject item = null)
     {
         float pixelsPerUnit = Mathf.Max(i.sprite.rect.width, i.sprite.rect.height);
         i.spriteTemp = Sprite.Create(i.sprite.texture, new Rect(i.sprite.rect.x, i.sprite.rect.y, i.sprite.rect.width, i.sprite.rect.height),
@@ -101,8 +101,8 @@ public class GamePlayManager : MonoBehaviour
         item.GetComponentInChildren<TextMeshProUGUI>().text = i.name;
         i.occupiedCellsStart = new List<Vector2Int>(i.occupiedCells);
 
-        GridItemUI gridItemUI = item.AddComponent<GridItemUI>();
+        GridItemUI gridItemUI = item.GetComponent<GridItemUI>() ?? item.AddComponent<GridItemUI>();
         gridItemUI.gridItem = i;
-        return;
+        return item;
     }
 }
