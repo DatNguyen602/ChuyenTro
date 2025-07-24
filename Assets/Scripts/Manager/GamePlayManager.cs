@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GamePlayManager : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private List<GameObject> gameObjectsToManage;
 
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
-
+    public GameObject gridItemPrefab;
     private float timerInPlay = 0f;
     public float TimerInPlay
     {
@@ -87,4 +89,20 @@ public class GamePlayManager : MonoBehaviour
     public void AddEmotion(int amount) => Emotion += amount;
     public void AddComfort(int amount) => Comfort += amount;
     public void AddRelation(int amount) => Relation += amount;
+    public void RendererList(GridItem i, Transform Parent, GameObject item = null)
+    {
+        float pixelsPerUnit = Mathf.Max(i.sprite.rect.width, i.sprite.rect.height);
+        i.spriteTemp = Sprite.Create(i.sprite.texture, new Rect(i.sprite.rect.x, i.sprite.rect.y, i.sprite.rect.width, i.sprite.rect.height),
+                            new Vector2(0.5f, 0.5f),
+                            pixelsPerUnit: pixelsPerUnit);
+        if (!item) item = Instantiate(gridItemPrefab, Parent);
+        item.SetActive(true);
+        item.transform.GetChild(0).GetComponent<Image>().sprite = i.spriteTemp;
+        item.GetComponentInChildren<TextMeshProUGUI>().text = i.name;
+        i.occupiedCellsStart = new List<Vector2Int>(i.occupiedCells);
+
+        GridItemUI gridItemUI = item.AddComponent<GridItemUI>();
+        gridItemUI.gridItem = i;
+        return;
+    }
 }
