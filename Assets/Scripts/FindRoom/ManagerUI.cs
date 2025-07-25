@@ -29,5 +29,6 @@ public class ManagerUI : MonoBehaviour
     {
         Shop.SetActive(true);
         GridItem.SetActive(false);
+        BuyAndSell.instance.RenderBuyList();
     }
 }
