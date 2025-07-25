@@ -1,3 +1,4 @@
+using GoogleMobileAds.Api;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -55,6 +56,10 @@ public class GamePlayManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
     }
 
     public void LoadingScene(string sceneName)
