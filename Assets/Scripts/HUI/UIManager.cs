@@ -6,6 +6,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private RoomUI roomUI;
     public RoomUI RoomUI => roomUI;
+
+    [SerializeField] private MoveUI moveUI;
+    public MoveUI MoveUI => moveUI;
     private void Awake()
     {
         if (Instance == null)
@@ -17,4 +20,17 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public void HideAllUI()
+    {
+        roomUI.HideUI();
+        moveUI.HideUI();
+    }    
+    public bool IsUIBlock()
+    {
+        if(roomUI.IsBlock() || moveUI.IsBlock())
+        {
+            return true;
+        }  
+        return false;
+    }    
 }

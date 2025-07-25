@@ -4,11 +4,14 @@ using UnityEngine;
 public class HexTile : MonoBehaviour
 {
     public Vector2Int axialCoord;
-    private List<HexTile> neighbors = new();
+    public HexTileVisual HexTileVisual { get; private set; }
+    
+    [SerializeField]private List<HexTile> neighbors = new();
     [SerializeField] private TileContent content;
 
     private void Awake()
     {
+        HexTileVisual = GetComponent<HexTileVisual>();
         ClearContent();
     }
 
@@ -17,10 +20,21 @@ public class HexTile : MonoBehaviour
         axialCoord = coord;
         neighbors.Clear();
     }
-    public void AddNeibors(HexTile tile)
+    public void AddNeighbors(HexTile tile)
     {
         neighbors.Add(tile);
     }
+
+    public bool Isneighbor(HexTile tile)
+    {
+        return neighbors.Contains(tile);
+    }    
+
+    public List<HexTile> GetNeighbors()
+    {
+        return neighbors;
+    }    
+     
     public void SetContent(TileContent obj)
     {
         content = obj;
@@ -33,17 +47,15 @@ public class HexTile : MonoBehaviour
         {
             content.Setparent(null);
             content = null;
-            Debug.Log("h");
         }
 
     }
 
-    void OnMouseDown()
+    public void Interact()
     {
-        if (content != null)
-        {
-            content.OnInteract();
-        }
-    }
+        if(content != null) 
+        content.OnInteract();
+    }    
+
 
 }

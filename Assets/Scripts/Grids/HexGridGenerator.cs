@@ -72,7 +72,7 @@ public class HexGridGenerator : MonoBehaviour
                 Vector2Int neighborCoord = tile.axialCoord + dir;
                 if (hexMap.TryGetValue(neighborCoord, out HexTile neighbor))
                 {
-                    tile.AddNeibors(neighbor);
+                    tile.AddNeighbors(neighbor);
                 }
             }
         }
