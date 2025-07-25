@@ -8,14 +8,14 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public static GridManager instance { get; private set; }
 
     public GameObject gridItemPrefab, itemTemplate;
-    [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
+    [SerializeField] public List<GridItem> gridItems = new List<GridItem>();
     [SerializeField] private Transform gridParent;
     [SerializeField] private ScrollRect scrollRect;
 
     [SerializeField] private GraphicRaycaster raycaster;
     [SerializeField] private EventSystem eventSystem;
 
-    private List<GameObject> gridItemObjects = new List<GameObject>();
+    public List<GameObject> gridItemObjects = new List<GameObject>();
 
     private bool isHovered = false;
 
@@ -278,7 +278,18 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log("Xoay thành công.");
     }
 
+    public void RendererList()
+    {
+        // Xóa hết con cũ
+        for (int i = gridParent.childCount - 1; i >= 0; i--)
+            Destroy(gridParent.GetChild(i).gameObject);
 
+        // Tạo lại UI cho từng item trong gridItems
+        foreach (var i in gridItems)
+        {
+            GamePlayManager.instance.RendererList(i, gridParent, null);
+        }
+    }
 }
 
 public class GridItemUI : MonoBehaviour
