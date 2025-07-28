@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef922f8cf5a292445be56e263f757fed, type: 3}
+  m_Name: item_004
+  m_EditorClassIdentifier: 
+  itemName: New Item
+  id: item_004
+  sprite: {fileID: -1234755578, guid: 1de2f37c859ab48489aba48cd19a348d, type: 3}
+  spriteTemp: {fileID: 0}
+  spriteScale: 1.56
+  spriteOffsetPercent: {x: 0, y: 0.5}
+  occupiedCells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  occupiedCellsStart:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}

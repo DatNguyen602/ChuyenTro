@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,15 +7,15 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     public static GridManager instance { get; private set; }
 
-    [SerializeField] private GameObject gridItemPrefab, itemTemplate;
-    [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
+    public GameObject gridItemPrefab, itemTemplate;
+    [SerializeField] public List<GridItem> gridItems = new List<GridItem>();
     [SerializeField] private Transform gridParent;
     [SerializeField] private ScrollRect scrollRect;
 
     [SerializeField] private GraphicRaycaster raycaster;
     [SerializeField] private EventSystem eventSystem;
 
-    private List<GameObject> gridItemObjects = new List<GameObject>();
+    public List<GameObject> gridItemObjects = new List<GameObject>();
 
     private bool isHovered = false;
 
@@ -31,11 +30,26 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     private GameObject selectedObject;
-
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
     void Start()
     {
-        RendererList();
-        for(int i =0;i<10;i++)
+        
+        for( int i = 0; i < gridItems.Count; i++)
+        {
+            GamePlayManager.instance.RendererList(gridItems[i], gridParent, i < gridParent.childCount ? gridParent.GetChild(i).gameObject : null);
+        }
+        for (int i =0;i<10;i++)
         {
             GameObject item = Instantiate(itemTemplate);
             item.SetActive(false);
@@ -58,6 +72,10 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             raycaster.Raycast(pointerData, results);
             if (results.Count > 0)
             {
+                if (itemUISelected != null)
+                {
+                    itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
+                }
                 GridItemUI gridItemUI = (results[0]).gameObject.GetComponent<GridItemUI>();
                 if (gridItemUI == null)
                 {
@@ -75,7 +93,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if(itemUISelected != null)
+            if(itemUISelected != null&& itemSelected!=null)
             {
                 itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
             }
@@ -100,6 +118,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
                     itemSelected.transform.GetChild(0).localPosition = itemSelectedData.spriteOffsetPercent;
 
+                    Destroy(itemUISelected);//.SetActive(false);
                     gridItems.Remove(itemSelectedData);
                     GridItemObject gridItemObject = itemSelected.GetComponent<GridItemObject>() ?? itemSelected.AddComponent<GridItemObject>();
                     gridItemObject.gridItem = itemSelectedData;
@@ -140,7 +159,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                                 itemUISelected.GetComponent<Image>().color = Color.white;//new Color32(56, 56, 56, 115);
                             }
                             gridItems.Add(obj.GetComponent<GridItemObject>().gridItem);
-                            RendererList();
+                            GamePlayManager.instance.RendererList(obj.GetComponent<GridItemObject>().gridItem, gridParent);
                             obj.SetActive(false);
                             itemSelectedData = null;
                             itemSelected = null;
@@ -154,7 +173,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     };
 
                     itemUISelected = null;
-                    RendererList();
+                    //RendererList();
                 }
             }
         }
@@ -174,41 +193,22 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         GameObject newItem = Instantiate(itemTemplate, gridParent);
         gridItemObjects.Add(newItem);
         return newItem;
+
     }
-
-    public void RendererList()
-    {
-        for (int i = 0; i < gridParent.childCount; i++)
-        {
-            Destroy(gridParent.GetChild(i).gameObject);
-        }
-        foreach (GridItem i in gridItems)
-        {
-            float pixelsPerUnit = Mathf.Max(i.sprite.rect.width, i.sprite.rect.height);
-            i.spriteTemp = Sprite.Create(i.sprite.texture, new Rect(i.sprite.rect.x, i.sprite.rect.y, i.sprite.rect.width, i.sprite.rect.height),
-                              new Vector2(0.5f, 0.5f),
-                              pixelsPerUnit: pixelsPerUnit);
-            GameObject item = Instantiate(gridItemPrefab, gridParent);
-            item.transform.GetChild(0).GetComponent<Image>().sprite = i.spriteTemp;
-            item.GetComponentInChildren<TextMeshProUGUI>().text = i.name;
-            i.occupiedCellsStart = new List<Vector2Int>(i.occupiedCells);
-
-            GridItemUI gridItemUI = item.AddComponent<GridItemUI>();
-            gridItemUI.gridItem = i;
-        }
-    }
-
+   
     public void retunObjtoList()
     {
         if(selectedObject != null)
         {
             Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, false);
             gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
-            RendererList();
+            GamePlayManager.instance.RendererList(selectedObject.GetComponent<GridItemObject>().gridItem, gridParent);
             selectedObject.SetActive(false);
             selectedObject = null;
             itemSelectedData = null;
             itemSelected = null;
+
+            ManagerUI.instance.itemControlBtns.SetActive(selectedObject);
         }
     }
     public void RotateSelectedClockwise()
@@ -278,7 +278,18 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log("Xoay thành công.");
     }
 
+    public void RendererList()
+    {
+        // Xóa hết con cũ
+        for (int i = gridParent.childCount - 1; i >= 0; i--)
+            Destroy(gridParent.GetChild(i).gameObject);
 
+        // Tạo lại UI cho từng item trong gridItems
+        foreach (var i in gridItems)
+        {
+            GamePlayManager.instance.RendererList(i, gridParent, null);
+        }
+    }
 }
 
 public class GridItemUI : MonoBehaviour

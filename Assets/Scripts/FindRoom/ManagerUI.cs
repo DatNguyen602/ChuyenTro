@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ManagerUI : MonoBehaviour
 {
@@ -8,18 +7,29 @@ public class ManagerUI : MonoBehaviour
 
     public TextMeshProUGUI roomDataInfor;
     public GameObject itemControlBtns;
-    public Button Rote1, Rote2;
-
+    public GameObject GridItem;
+    public GameObject Shop;
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+    public void TurnOffShop()
+    {
+        Shop.SetActive(false);
+        GridItem.SetActive(true);
+
+    }
+    public void TurnOnShop()
+    {
+        Shop.SetActive(true);
+        GridItem.SetActive(false);
+        BuyAndSell.instance.RenderBuyList();
     }
 }
