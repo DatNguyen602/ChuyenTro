@@ -205,6 +205,10 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void ShowRewardedAd()
     {
+        System.Action LastShow = () =>
+        {
+           Debug.Log("Rewarded ad shown.");
+        };
         if (_rewardedAd?.CanShowAd() == true)
         {
             _rewardedAd.Show(reward =>
@@ -212,6 +216,8 @@ public class GoogleAdsManager : MonoBehaviour
                 Debug.Log($"Reward received: {reward.Type}, {reward.Amount}");
                 RewardedEndEvent?.Invoke();
             });
+            _rewardedAd.OnAdFullScreenContentOpened -= LastShow;
+            _rewardedAd.OnAdFullScreenContentOpened += LastShow;
         }
         else
         {
