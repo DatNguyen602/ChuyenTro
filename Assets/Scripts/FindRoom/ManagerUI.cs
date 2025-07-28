@@ -24,6 +24,7 @@ public class ManagerUI : MonoBehaviour
     {
         Shop.SetActive(false);
         GridItem.SetActive(true);
+
     }
     public void TurnOnShop()
     {
