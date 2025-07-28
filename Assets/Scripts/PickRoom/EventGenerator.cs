@@ -23,6 +23,8 @@ public class EventGenerator : MonoBehaviour
             choice.label = "đi ăn";
             choice.consequenceText = "Bạn ăn món bình dân ở phòng trọ.";
             choice.timeCost = 1;
+            choice.startTime = timeLine.GetCurrentHour();
+            choice.endTime =timeLine.GetCurrentHour() + 1;
             choice.SetTimeLine(timeLine);
 
             choice.OnApply = () =>
@@ -43,6 +45,8 @@ public class EventGenerator : MonoBehaviour
             choice.label = "ngủ";
             choice.consequenceText = "Bạn nghỉ ngơi tại phòng.";
             choice.timeCost = 2;
+            choice.startTime = timeLine.GetCurrentHour();
+            choice.endTime = timeLine.GetCurrentHour() + 1;
             choice.SetTimeLine(timeLine);
 
 
@@ -66,7 +70,7 @@ public class EventGenerator : MonoBehaviour
         rt.anchoredPosition = targetPos - new Vector2(0, 300); 
 
         rt.DOAnchorPos(targetPos, 0.5f).SetEase(Ease.OutCubic);
-
+        
         CanvasGroup group = sctrollView.GetComponent<CanvasGroup>();
         if (group != null)
         {

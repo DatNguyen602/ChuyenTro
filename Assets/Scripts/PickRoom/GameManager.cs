@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
         this.roomInfor = roomInfor;
         eventGenerator.ShowChoices();
         eventGenerator.GenEvent(playerStats, roomInfor, timeLine);
+        timeLine.ShowUI();
     }
 
     private void OnTimeAdvanced(int t)
