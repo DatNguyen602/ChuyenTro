@@ -21,6 +21,7 @@ public class Container : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            gameObject.SetActive(false);
         }
         else if (Instance != this)
         {
@@ -28,8 +29,9 @@ public class Container : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnEnable()
     {
+        size = GamePlayManager.instance.getRoomInfor.size;
         float scaleFactor = 1f;
         if (autoScale)
         {
