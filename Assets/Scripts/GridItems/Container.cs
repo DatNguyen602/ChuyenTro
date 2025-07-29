@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Container : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Container : MonoBehaviour
 
     // scale theo tỷ lệ màn hình
     [SerializeField] private bool autoScale = true;
+    [SerializeField] private Slider zoomSlider;
 
     private void Awake()
     {
@@ -32,6 +34,12 @@ public class Container : MonoBehaviour
     void OnEnable()
     {
         size = GamePlayManager.instance.getRoomInfor.size;
+        if(size.x < size.y)
+        {
+            zoomSlider.minValue = Mathf.Min(size.x, size.y) + 2;
+            zoomSlider.maxValue = Mathf.Max(size.x, size.y) + 2;
+        }
+
         float scaleFactor = 1f;
         if (autoScale)
         {
@@ -56,6 +64,11 @@ public class Container : MonoBehaviour
         }
 
         Camera.main.orthographicSize = size.x + 2;
+        zoomSlider.value = size.x + 2;
+        zoomSlider.onValueChanged.AddListener(value =>
+        {
+            Camera.main.orthographicSize = value;
+        });
     }
 
     public bool CheckState(Vector2 pos, List<Vector2Int> occupiedCells)
