@@ -12,7 +12,6 @@ public class RoomPoint : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log($"Clicked on room: {roomData?.roomName}");
-        GamePlayManager.instance.RoomSelected = roomData;
         if (ManagerUI.instance != null && roomData != null)
         {
             ManagerUI.instance.roomDataInfor.text =

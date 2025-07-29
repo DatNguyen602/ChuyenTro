@@ -9,6 +9,12 @@ public class GamePlayManager : MonoBehaviour
 {
     public static GamePlayManager instance;
 
+    [SerializeField] private RoomPicker roomPicker;
+
+    [SerializeField] private GameObject gridContainer;
+
+    [SerializeField] private GameObject itemsCanvas;
+
     [SerializeField] private List<GameObject> gameObjectsToManage;
 
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
@@ -27,6 +33,8 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private int relation = 0;  // 0 –100 (tuỳ NPC)
 
     /*–  2.  Thuộc tính public (đọc/ghi)  –*/
+
+    private RoomInfor roomInfor;
     public long Money
     {
         get => money;
@@ -38,12 +46,7 @@ public class GamePlayManager : MonoBehaviour
     public int Comfort { get => comfort; set { comfort = Mathf.Clamp(value, 0, 100); } }
     public int Relation { get => relation; set { relation = Mathf.Clamp(value, 0, 100); } }
 
-    private RoomData roomSelected;
-    public RoomData RoomSelected
-    {
-        get { return roomSelected; }
-        set { roomSelected = value; }
-    }
+    
 
     public GamePhase gamePhase = GamePhase.FindingRoom;
 
@@ -57,6 +60,20 @@ public class GamePlayManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        roomPicker.OnTake += OnTakeRoom;
+    }
+
+
+    private void OnTakeRoom(RoomInfor roomInfor)
+    {
+        this.roomInfor = roomInfor;
+        gridContainer.SetActive(true);
+        itemsCanvas.SetActive(true);
+        
     }
 
     public void LoadingScene(string sceneName)
