@@ -36,11 +36,16 @@ public class Container : MonoBehaviour
         size = GamePlayManager.instance.getRoomInfor.size;
         if(size.x < size.y)
         {
+            zoomSlider.gameObject.SetActive(true);
             zoomSlider.minValue = Mathf.Min(size.x, size.y) + 2;
             zoomSlider.maxValue = Mathf.Max(size.x, size.y) + 2;
         }
+        else
+        {
+            zoomSlider.gameObject.SetActive(false);
+        }
 
-        float scaleFactor = 1f;
+            float scaleFactor = 1f;
         if (autoScale)
         {
             float screenRatio = (float)Screen.width / Screen.height;
