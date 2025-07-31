@@ -1,37 +1,29 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private RoomInfor roomInfor;
+    public static GameManager Instance;
 
-    [SerializeField] private RoomPicker roomPicker;
+    public SpriteRenderer selectedUniversity; // Cái SpriteRenderer trên nhân vật hoặc UI
 
-    [SerializeField] private TimeLine timeLine;
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-    [SerializeField] private PlayerStats playerStats;
-
-
-    [SerializeField] private EventGenerator eventGenerator;
-
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // giữ lại khi sang scene khác
+    }
 
     private void Start()
     {
-
-        roomPicker.OnTake += OnTakeRoom;
-        timeLine.OnTimePass += OnTimeAdvanced;
-    }
-
-
-    private void OnTakeRoom(RoomInfor roomInfor)
-    {
-        this.roomInfor = roomInfor;
-        eventGenerator.ShowChoices();
-        eventGenerator.GenEvent(playerStats, roomInfor, timeLine);
-        timeLine.ShowUI();
-    }
-
-    private void OnTimeAdvanced(int t)
-    {
-        eventGenerator.GenEvent(playerStats, roomInfor, timeLine);
+        // Lấy logo từ GameData
+        if (GameData.Instance != null && GameData.Instance.selectedLogo != null)
+        {
+            selectedUniversity.sprite = GameData.Instance.selectedLogo;
+        }
     }
 }

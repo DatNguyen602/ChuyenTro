@@ -16,7 +16,6 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private GameObject itemsCanvas;
 
     [SerializeField] private List<GameObject> gameObjectsToManage;
-
     [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
     public GameObject gridItemPrefab;
     private float timerInPlay = 0f;
