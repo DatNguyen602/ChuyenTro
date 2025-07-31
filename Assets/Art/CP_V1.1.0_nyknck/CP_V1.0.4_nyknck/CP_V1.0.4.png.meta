@@ -5148,6 +5148,72 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: CP_V1.0.4_200
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 176
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c6e3fffc21d8f540920ba5eaf1fbec1
+      internalID: -1224340251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CP_V1.0.4_201
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 176
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51c5be83171ef99468ba900e40dd3841
+      internalID: -1996162390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CP_V1.0.4_202
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 176
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f112690172d7f544b3b515fc4d85919
+      internalID: -1208089982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -5276,6 +5342,9 @@ TextureImporter:
       CP_V1.0.4_199: -1637400536
       CP_V1.0.4_2: -3672914969698219484
       CP_V1.0.4_20: 4765299235684716044
+      CP_V1.0.4_200: -1224340251
+      CP_V1.0.4_201: -1996162390
+      CP_V1.0.4_202: -1208089982
       CP_V1.0.4_21: 8048336185474192458
       CP_V1.0.4_22: -2246916494574519807
       CP_V1.0.4_23: -3077082062147936637
