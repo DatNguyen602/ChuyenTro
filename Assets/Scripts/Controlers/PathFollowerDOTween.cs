@@ -18,7 +18,7 @@ public class PathFollowerDOTween : MonoBehaviour
     public float loopDelay = 1f;
 
     [Header("Gizmo")]
-    public Color gizmoPathColor = Color.green;
+    public Color gizmoPathColor = Color.red;
 
     private Sequence sequence;
 
@@ -65,15 +65,15 @@ public class PathFollowerDOTween : MonoBehaviour
             }
 
             float pause = 0;
-            if (wpList[i].pauseDuration.x >= 0 && wpList[i].pauseDuration.y > 0)
+            if (wpList[i].pauseDuration.from >= 0 && wpList[i].pauseDuration.to > 0)
             {
-                if (wpList[i].pauseDuration.x < wpList[i].pauseDuration.y)
+                if (wpList[i].pauseDuration.from < wpList[i].pauseDuration.to)
                 {
-                    pause = Random.Range(wpList[i].pauseDuration.x, wpList[i].pauseDuration.y);
+                    pause = Random.Range(wpList[i].pauseDuration.from, wpList[i].pauseDuration.to);
                 }
-                else if (wpList[i].pauseDuration.x == wpList[i].pauseDuration.y)
+                else if (wpList[i].pauseDuration.from == wpList[i].pauseDuration.to)
                 {
-                    pause = wpList[i].pauseDuration.x;
+                    pause = wpList[i].pauseDuration.from;
                 }
             }
 

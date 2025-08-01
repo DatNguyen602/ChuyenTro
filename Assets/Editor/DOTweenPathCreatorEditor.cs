@@ -8,6 +8,29 @@ public class DOTweenPathCreatorEditor : Editor
     private DOTweenPathCreator creator;
     private SerializedProperty waypointsProp;
 
+    [MenuItem("GameObject/2D Object/Path Creator", false, 10)]
+    public static void CreatePathCreator()
+    {
+        GameObject go = new GameObject("Path Creator");
+        GameObject picked = Selection.activeGameObject;
+        if (picked != null)
+        {
+            go.transform.SetParent(picked.transform);
+        }
+        DOTweenPathCreator dOTweenPathCreator = go.AddComponent<DOTweenPathCreator>();
+        Selection.activeGameObject = go;
+        GameObject flow = new GameObject("ObjectFlow");
+        flow.transform.SetParent(go.transform);
+        PathFollowerDOTween pathFollowerDOTween = flow.AddComponent<PathFollowerDOTween>();
+        pathFollowerDOTween.pathCreator = dOTweenPathCreator;
+        GameObject avatar = new GameObject("Avatar");
+        avatar.transform.SetParent(flow.transform);
+        SpriteRenderer sr = avatar.AddComponent<SpriteRenderer>();
+        Texture2D tex = EditorGUIUtility.whiteTexture;
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        sr.sprite = sprite;
+    }
+
     private void OnEnable()
     {
         creator = (DOTweenPathCreator)target;
@@ -85,8 +108,38 @@ public class DOTweenPathCreatorEditor : Editor
             }
 
             // Hiện nhãn pauseDuration
-            Handles.Label(worldPos + Vector3.up * size * 1.2f, $"Pause: {wp.pauseDuration:F2}s");
+            Handles.Label(worldPos + Vector3.up /** size * 2f*/
+                , $"Pause\n{wp.pauseDuration.from:F2}~{wp.pauseDuration.to:F2}s");
         }
+    }
+}
+
+[CustomPropertyDrawer(typeof(ObjectRan))]
+public class ObjectRanDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        // Tính toán layout
+        EditorGUI.BeginProperty(position, label, property);
+
+        var fromProp = property.FindPropertyRelative("from");
+        var toProp = property.FindPropertyRelative("to");
+
+        float fieldWidth = 98;
+
+        Rect labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, position.height);
+        EditorGUI.LabelField(labelRect, label);
+
+        float xStart = 156;
+
+        // From field
+        Rect fromFieldRect = new Rect(xStart, position.y, fieldWidth, position.height);
+        EditorGUI.PropertyField(fromFieldRect, fromProp, GUIContent.none);
+
+        Rect toFieldRect = new Rect(256, position.y, fieldWidth, position.height);
+        EditorGUI.PropertyField(toFieldRect, toProp, GUIContent.none);
+
+        EditorGUI.EndProperty();
     }
 }
 #endif
