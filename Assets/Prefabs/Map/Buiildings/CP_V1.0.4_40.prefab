@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2215133164557014680}
   - component: {fileID: 3725525208119721946}
   - component: {fileID: 3980550168597178503}
+  - component: {fileID: 3838873801061364285}
   m_Layer: 0
   m_Name: CP_V1.0.4_40
   m_TagString: Untagged
@@ -134,3 +135,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &3838873801061364285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6259926197604563840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d034e56bf3e4240bef5017dea1f2e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 1528914037826442928, guid: d30af7c061cc0be49a02c3937c391c69, type: 3}
+  - {fileID: 527779456311886838, guid: d30af7c061cc0be49a02c3937c391c69, type: 3}
+  - {fileID: -543529593935653529, guid: d30af7c061cc0be49a02c3937c391c69, type: 3}
+  frameDuration: 5
+  pingPong: 1
+  loops: -1
