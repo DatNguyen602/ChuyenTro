@@ -18,7 +18,7 @@ public class JoyStick : MonoBehaviour
 
     private void Move()
     {
-        Vector2 direction = new Vector2(joystick.Horizontal, joystick.Vertical);
+        Vector2 direction = new Vector2(joystick.Horizontal, joystick.Vertical).normalized;
         rb.linearVelocity = direction * moveSpeed;
 
         // Optional: Flip player theo hướng
