@@ -17,10 +17,6 @@ public class PathFollowerDOTween : MonoBehaviour
     [Tooltip("Thời gian dừng trước khi bắt đầu lại vòng tiếp theo")]
     public float loopDelay = 1f;
 
-    //[Header("Rotation Settings")]
-    //[Tooltip("Thời gian xoay về hướng waypoint trước khi di chuyển")]
-    //public float rotationDuration = 0.2f;
-
     [Header("Gizmo")]
     public Color gizmoPathColor = Color.green;
 
@@ -37,21 +33,17 @@ public class PathFollowerDOTween : MonoBehaviour
             return;
         }
 
-        // Tạo mảng world‐points
         var wpList = pathCreator.waypoints;
         Vector3[] pts = wpList
             .Select(wp => pathCreator.transform.TransformPoint(wp.position))
             .ToArray();
 
-        // Tính tổng độ dài path
         float totalLen = 0f;
         for (int i = 1; i < pts.Length; i++)
             totalLen += Vector3.Distance(pts[i - 1], pts[i]);
 
-        // Đặt vị trí bắt đầu
         transform.position = pts[0];
 
-        // Xây Sequence
         sequence = DOTween.Sequence();
 
         for (int i = 1; i < pts.Length; i++)
@@ -62,7 +54,6 @@ public class PathFollowerDOTween : MonoBehaviour
             float segLen = Vector3.Distance(from, to);
             float segTime = totalDuration * (segLen / totalLen);
 
-            // 1) Xoay về hướng điểm tiếp theo 2D (xoay quanh Z), thay bằng đoạn sau:
             Vector3 dir = (to - from).normalized;
             float angle = Mathf.Atan2((to - from).y, (to - from).x) * Mathf.Rad2Deg;
             sequence.Append(transform.DOMove(to, segTime).SetEase(Ease.Linear))
@@ -73,14 +64,24 @@ public class PathFollowerDOTween : MonoBehaviour
                 sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(false));
             }
 
-            // 3) Pause tại waypoint
-            float pause = wpList[i].pauseDuration;
+            float pause = 0;
+            if (wpList[i].pauseDuration.x >= 0 && wpList[i].pauseDuration.y > 0)
+            {
+                if (wpList[i].pauseDuration.x < wpList[i].pauseDuration.y)
+                {
+                    pause = Random.Range(wpList[i].pauseDuration.x, wpList[i].pauseDuration.y);
+                }
+                else if (wpList[i].pauseDuration.x == wpList[i].pauseDuration.y)
+                {
+                    pause = wpList[i].pauseDuration.x;
+                }
+            }
+
             if (pause > 0f)
                 sequence.AppendCallback(() => isPausedAtWaypoint = true).
                     AppendInterval(pause).AppendCallback(() => isPausedAtWaypoint = false); ;
         }
 
-        // 4) Delay giữa các lần lặp, rồi thiết lập loop/ping-pong
         if (loop)
         {
             if (loopDelay > 0f)
