@@ -868,7 +868,7 @@ MonoBehaviour:
   mainCamera: {fileID: 459042298}
   zoomSize: 3
   zoomDuration: 0.15
-  speed: 2
+  speed: 5.47
 --- !u!4 &1829638462
 Transform:
   m_ObjectHideFlags: 0
