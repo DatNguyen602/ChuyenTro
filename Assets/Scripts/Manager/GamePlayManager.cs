@@ -60,7 +60,11 @@ public class GamePlayManager : MonoBehaviour
     }
     private void Start()
     {
-        OnTakeRoom();
+        try
+        {
+            OnTakeRoom();
+        }
+        catch { }
     }
     public void OnTakeRoom()
     {

@@ -66,6 +66,7 @@ public class PathFollowerDOTween : MonoBehaviour
             .ToArray();
         GamePlayManager.instance.Player.transform.position = wpList[1].position - Vector3.one;
         GamePlayManager.instance.Player.SetActive(false);
+        GamePlayManager.instance.Player.GetComponent<JoyStick>().joystick.gameObject.SetActive(false);
         float totalLen = 0f;
         for (int i = 1; i < pts.Length; i++)
             totalLen += Vector3.Distance(pts[i - 1], pts[i]);
@@ -127,6 +128,11 @@ public class PathFollowerDOTween : MonoBehaviour
                             segTime
                         ).SetEase(Ease.InOutSine)
                     );
+
+                    sequence.AppendCallback(() =>
+                    {
+                        GamePlayManager.instance.Player.GetComponent<JoyStick>().joystick.gameObject.SetActive(true);
+                    });
                 }
                 sequence.AppendCallback(() => isPausedAtWaypoint = true).
                     AppendInterval(pause / 2).AppendCallback(() => isPausedAtWaypoint = false);
