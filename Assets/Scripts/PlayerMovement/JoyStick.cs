@@ -17,7 +17,7 @@ public class JoyStick : MonoBehaviour
     public TextMeshProUGUI sizeText;
     public Button buyButton;
     private RoomInfo currentRoom;
-
+    public GameObject Shop;
     public void Show(RoomInfo room)
     {
         currentRoom = room;
@@ -58,6 +58,10 @@ public class JoyStick : MonoBehaviour
         {
             Show(roomList[0]);
         }
+        else if (collision.gameObject.tag == ("Shop"))
+        {
+            Shop.SetActive(true); // Hiển thị cửa hàng khi va chạm với đối tượng có tag "Shop"
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -65,6 +69,10 @@ public class JoyStick : MonoBehaviour
         if (collision.gameObject.tag == ("Tro"))
         {
             panel.SetActive(false); // ẩn panel khi không còn va chạm
+        }
+        else if (collision.gameObject.tag == ("Shop"))
+        {
+            Shop.SetActive(false); // ẩn cửa hàng khi không còn va chạm
         }
     }
     public void BuyRoom()
