@@ -1,11 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
-[CreateAssetMenu(fileName = "RoomInfo", menuName = "Scriptable Objects/RoomInfo")]
+[CreateAssetMenu(fileName = "NewRoomInfo", menuName = "ScriptableObjects/RoomInfo")]
 public class RoomInfo : ScriptableObject
 {
-    [Header("Thông tin phòng")]
-    public string tenPhong;
-    public int giaPhong;
-    public int chieuDai;
-    public int chieuRong;
+    public string roomName;
+    public int price;
+    public Vector2Int size;
 }

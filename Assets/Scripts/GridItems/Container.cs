@@ -17,24 +17,23 @@ public class Container : MonoBehaviour
     // scale theo tỷ lệ màn hình
     [SerializeField] private bool autoScale = true;
     [SerializeField] private Slider zoomSlider;
-
     private void Awake()
     {
+
+        gameObject.SetActive(false);
         if (Instance == null)
         {
             Instance = this;
-            gameObject.SetActive(false);
         }
         else if (Instance != this)
         {
             Destroy(gameObject);
         }
     }
-
     void OnEnable()
     {
-        size = GamePlayManager.instance.getRoomInfor.size;
-        if(size.x < size.y)
+        size= TempRoomData.selectedRoom.size;
+        if (size.x < size.y)
         {
             zoomSlider.gameObject.SetActive(true);
             zoomSlider.minValue = Mathf.Min(size.x, size.y) + 2;

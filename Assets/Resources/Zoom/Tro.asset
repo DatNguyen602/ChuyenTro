@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ad02b39a98648d4090c9d7cc2c8b946, type: 3}
-  m_Name: "Tr\u1ECD"
+  m_Name: Tro
   m_EditorClassIdentifier: 
-  tenPhong: "Tr\u1ECD Sinh Vi\xEAn"
-  giaPhong: 2000000
-  chieuDai: 8
-  chieuRong: 9
+  roomName: "Tr\u1ECD"
+  price: 30000
+  size: {x: 3, y: 4}
