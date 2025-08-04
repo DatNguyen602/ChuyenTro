@@ -19,25 +19,21 @@ public class Container : MonoBehaviour
     [SerializeField] private Slider zoomSlider;
     private void Awake()
     {
+
+        gameObject.SetActive(false);
         if (Instance == null)
         {
             Instance = this;
-            gameObject.SetActive(false);
         }
         else if (Instance != this)
         {
             Destroy(gameObject);
         }
     }
-
-    private void Start()
-    {
-        gameObject.SetActive(true);
-    }
-
     void OnEnable()
     {
-        if(size.x < size.y)
+        size= TempRoomData.selectedRoom.size;
+        if (size.x < size.y)
         {
             zoomSlider.gameObject.SetActive(true);
             zoomSlider.minValue = Mathf.Min(size.x, size.y) + 2;

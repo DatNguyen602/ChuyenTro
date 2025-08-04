@@ -56,12 +56,14 @@ public class GamePlayManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    private void OnTakeRoom()
+    private void Start()
+    {
+        OnTakeRoom();
+    }
+    public void OnTakeRoom()
     {
         gridContainer.SetActive(true);
         itemsCanvas.SetActive(true);
-        
     }
 
     public void LoadingScene(string sceneName)

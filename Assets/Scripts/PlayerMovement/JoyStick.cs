@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Recorder.OutputPath;
+using static UnityEngine.Rendering.DebugUI;
 
 public class JoyStick : MonoBehaviour
 {
@@ -8,6 +11,23 @@ public class JoyStick : MonoBehaviour
     public Joystick joystick;
     private Rigidbody2D rb;
     public List<RoomInfo> roomList = new List<RoomInfo>();
+    public GameObject panel;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI priceText;
+    public TextMeshProUGUI sizeText;
+    public Button buyButton;
+    private RoomInfo currentRoom;
+
+    public void Show(RoomInfo room)
+    {
+        currentRoom = room;
+
+        nameText.text = "Tên phòng: " + room.roomName;
+        priceText.text = "Giá: " + room.price.ToString();
+        sizeText.text = $"Kích thước: {room.size} ";
+
+        panel.SetActive(true); // bật panel
+    }
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,13 +56,23 @@ public class JoyStick : MonoBehaviour
         // Xử lý va chạm với các đối tượng khác nếu cần
         if (collision.gameObject.tag == ("Tro"))
         {
-            SceneManager.LoadScene("PlayScene");
-            Container.Instance.size=roomList[0].size;
+            Show(roomList[0]);
         }
-        else if (collision.gameObject.tag == ("Room"))
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // Xử lý khi rời khỏi va chạm với các đối tượng khác nếu cần
+        if (collision.gameObject.tag == ("Tro"))
         {
+            panel.SetActive(false); // ẩn panel khi không còn va chạm
+        }
+    }
+    public void BuyRoom()
+    {
+        if (currentRoom != null)
+        {
+            TempRoomData.selectedRoom = currentRoom;
             SceneManager.LoadScene("PlayScene");
-            Container.Instance.size = roomList[1].size;
         }
     }
 }
