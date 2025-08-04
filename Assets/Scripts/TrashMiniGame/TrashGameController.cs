@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class TrashGameController : MonoBehaviour
 {
-    public static TrashGameController Instance {  get; private set; }
 
     [SerializeField] private TrashSpawner trashSpawner;
     [SerializeField] private TouchDragTrash touchDragTrash;
@@ -17,18 +16,7 @@ public class TrashGameController : MonoBehaviour
 
 
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }    
-        else
-        {
-            Destroy(gameObject);
-        }    
-    }
-
+    
     private void Start()
     {
         timer = timeLimits;
@@ -40,7 +28,7 @@ public class TrashGameController : MonoBehaviour
 
     private void Update()
     {
-        if (currentCount == 0) return;
+        if (currentCount == 0 || timer<=0f ) return;
 
         timer -= Time.deltaTime;
 
