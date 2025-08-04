@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -51,7 +52,8 @@ public class GamePlayManager : MonoBehaviour
     public int Comfort { get => comfort; set { comfort = Mathf.Clamp(value, 0, 100); } }
     public int Relation { get => relation; set { relation = Mathf.Clamp(value, 0, 100); } }
 
-    
+    public GameObject Player;
+    public CinemachineCamera virtualCamera;
 
     public GamePhase gamePhase = GamePhase.FindingRoom;
 
@@ -69,7 +71,7 @@ public class GamePlayManager : MonoBehaviour
 
     private void Start()
     {
-        roomPicker.OnTake += OnTakeRoom;
+        if(roomPicker) roomPicker.OnTake += OnTakeRoom;
     }
 
 

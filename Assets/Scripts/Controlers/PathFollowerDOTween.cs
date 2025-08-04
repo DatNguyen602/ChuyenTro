@@ -33,11 +33,30 @@ public class PathFollowerDOTween : MonoBehaviour
             return;
         }
 
+        SetupStart();
+    }
+
+    public void RePLay()
+    {
+        if (sequence != null && sequence.IsActive())
+        {
+            sequence.Restart();
+            sequence.Play();
+        }
+        else
+        {
+            Start();
+        }
+    }
+
+    private void SetupStart()
+    {
         var wpList = pathCreator.waypoints;
         Vector3[] pts = wpList
             .Select(wp => pathCreator.transform.TransformPoint(wp.position))
             .ToArray();
-
+        GamePlayManager.instance.Player.transform.position = wpList[1].position - Vector3.one;
+        GamePlayManager.instance.Player.SetActive(false);
         float totalLen = 0f;
         for (int i = 1; i < pts.Length; i++)
             totalLen += Vector3.Distance(pts[i - 1], pts[i]);
@@ -45,10 +64,15 @@ public class PathFollowerDOTween : MonoBehaviour
         transform.position = pts[0];
 
         sequence = DOTween.Sequence();
+        //sequence.Pause();
+        float targetZoom = Camera.main.orthographicSize;
+        GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = 5;
+
+        //sequence.Join(Camera.main.DOOrthoSize(targetZoom, totalDuration).SetEase(Ease.OutQuad));
 
         for (int i = 1; i < pts.Length; i++)
         {
-            if(i == 1) sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(true));
+            if (i == 1) sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(true));
             Vector3 from = pts[i - 1];
             Vector3 to = pts[i];
             float segLen = Vector3.Distance(from, to);
@@ -59,7 +83,7 @@ public class PathFollowerDOTween : MonoBehaviour
             sequence.Append(transform.DOMove(to, segTime).SetEase(Ease.Linear))
                     .Join(transform.DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutQuad));
 
-            if(i == pts.Length - 1)
+            if (i == pts.Length - 1)
             {
                 sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(false));
             }
@@ -78,19 +102,38 @@ public class PathFollowerDOTween : MonoBehaviour
             }
 
             if (pause > 0f)
+            {
                 sequence.AppendCallback(() => isPausedAtWaypoint = true).
-                    AppendInterval(pause).AppendCallback(() => isPausedAtWaypoint = false); ;
+                    AppendInterval(pause / 2).AppendCallback(() => isPausedAtWaypoint = false);
+                if (i == 1)
+                {
+                    sequence.AppendCallback(() =>
+                    {
+                        GamePlayManager.instance.Player.SetActive(true);
+                    });
+                    sequence.Join(DOTween.To(
+                            () => GamePlayManager.instance.virtualCamera.Lens.OrthographicSize,
+                            x => GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = x,
+                            targetZoom,
+                            segTime
+                        ).SetEase(Ease.InOutSine)
+                    );
+                }
+                sequence.AppendCallback(() => isPausedAtWaypoint = true).
+                    AppendInterval(pause / 2).AppendCallback(() => isPausedAtWaypoint = false);
+            }
+            else
+            {
+                if (i == 1)
+                {
+                    sequence.AppendCallback(() =>
+                    {
+                        GamePlayManager.instance.Player.SetActive(true);
+                    });
+                    //sequence.Join(Camera.main.DOOrthoSize(targetZoom, totalDuration).SetEase(Ease.InOutSine));
+                }
+            }
         }
-
-        if (loop)
-        {
-            if (loopDelay > 0f)
-                sequence.AppendInterval(loopDelay);
-
-            sequence.SetLoops(-1, pingPong ? LoopType.Yoyo : LoopType.Restart);
-        }
-
-        sequence.Play();
     }
 
     private void OnDisable()
