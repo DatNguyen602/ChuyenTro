@@ -7,6 +7,7 @@ public class JoyStick : MonoBehaviour
     public float moveSpeed = 5f;
     public Joystick joystick;
     private Rigidbody2D rb;
+    public List<RoomInfo> roomList = new List<RoomInfo>();
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,9 +36,13 @@ public class JoyStick : MonoBehaviour
         // Xử lý va chạm với các đối tượng khác nếu cần
         if (collision.gameObject.tag == ("Tro"))
         {
-            RoomInfo info = GamePlayManager.instance.roomList[0];
             SceneManager.LoadScene("PlayScene");
-
+            Container.Instance.size=roomList[0].size;
+        }
+        else if (collision.gameObject.tag == ("Room"))
+        {
+            SceneManager.LoadScene("PlayScene");
+            Container.Instance.size = roomList[1].size;
         }
     }
 }

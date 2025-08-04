@@ -1674,7 +1674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124734c1642d51746a29e3e9b78bbea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomPicker: {fileID: 1687553204}
   gridContainer: {fileID: 630997855}
   itemsCanvas: {fileID: 2068390311}
   gameObjectsToManage: []
@@ -1879,6 +1878,8 @@ MonoBehaviour:
   spacing: 1
   autoScale: 1
   zoomSlider: {fileID: 1269785634}
+  roomList:
+  - {fileID: 11400000, guid: 4f81a04ac207e9c449bfac763927add0, type: 2}
 --- !u!4 &630997857
 Transform:
   m_ObjectHideFlags: 0
@@ -2489,7 +2490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb41cc90690c5f0468ff53da807413e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomInforTMP: {fileID: 1177516145}
 --- !u!224 &864251749 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7652772201056493209, guid: 7cc6d774d95e450419f98ab58b920993, type: 3}
@@ -6446,7 +6446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb41cc90690c5f0468ff53da807413e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomInforTMP: {fileID: 896112741}
 --- !u!1 &1608381855
 GameObject:
   m_ObjectHideFlags: 0
@@ -6765,13 +6764,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38848e160aec546801678da826e5ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 790282458}
-  roomCards:
-  - {fileID: 1565437289}
-  - {fileID: 821032108}
-  SkipNotice: {fileID: 1380645155}
-  TakeNotice: {fileID: 1818446530}
-  skipCountTMP: {fileID: 1979098779}
 --- !u!114 &1687553205
 MonoBehaviour:
   m_ObjectHideFlags: 0

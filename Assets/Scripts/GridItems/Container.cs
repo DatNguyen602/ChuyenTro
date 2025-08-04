@@ -17,7 +17,6 @@ public class Container : MonoBehaviour
     // scale theo tỷ lệ màn hình
     [SerializeField] private bool autoScale = true;
     [SerializeField] private Slider zoomSlider;
-
     private void Awake()
     {
         if (Instance == null)
@@ -31,9 +30,13 @@ public class Container : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        gameObject.SetActive(true);
+    }
+
     void OnEnable()
     {
-        size = GamePlayManager.instance.getRoomInfor.size;
         if(size.x < size.y)
         {
             zoomSlider.gameObject.SetActive(true);
