@@ -36,6 +36,15 @@ public class PathFollowerDOTween : MonoBehaviour
         SetupStart();
     }
 
+    private void OnEnable()
+    {
+        try
+        {
+            SetupStart();
+        }
+        catch { }
+    }
+
     public void RePLay()
     {
         if (sequence != null && sequence.IsActive())

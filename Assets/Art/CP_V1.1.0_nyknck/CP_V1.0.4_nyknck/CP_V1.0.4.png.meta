@@ -5238,6 +5238,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: CP_V1.0.4_203
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 384
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6ecad195985820428ed0994954b2962
+      internalID: 131195087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -5369,6 +5391,7 @@ TextureImporter:
       CP_V1.0.4_200: -1224340251
       CP_V1.0.4_201: -1996162390
       CP_V1.0.4_202: -1208089982
+      CP_V1.0.4_203: 131195087
       CP_V1.0.4_21: 8048336185474192458
       CP_V1.0.4_22: -2246916494574519807
       CP_V1.0.4_23: -3077082062147936637
