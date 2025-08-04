@@ -128,9 +128,4 @@ public class RoomPicker : MonoBehaviour
         uiTransform.localScale = Vector3.zero;
         uiTransform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
     }
-
-
-
-
-
 }

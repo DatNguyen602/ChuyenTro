@@ -34,7 +34,7 @@ public class GamePlayManager : MonoBehaviour
     /*–  2.  Thuộc tính public (đọc/ghi)  –*/
 
     private RoomInfor roomInfor;
-
+    public List<RoomInfo> roomList=new List<RoomInfo>();
     public RoomInfor getRoomInfor
     {
         get => roomInfor;

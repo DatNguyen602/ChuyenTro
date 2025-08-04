@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad02b39a98648d4090c9d7cc2c8b946, type: 3}
   m_Name: KTX
   m_EditorClassIdentifier: 
-  tenPhong: "K\xFD T\xFAc X\xE1"
+  tenPhong: "K\u1EF9 T\xFAc X\xE1"
   giaPhong: 500000
   chieuDai: 9
   chieuRong: 7
