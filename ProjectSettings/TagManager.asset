@@ -7,6 +7,7 @@ TagManager:
   - ElConttainer
   - Obstacle
   - Tro
+  - Trash
   layers:
   - Default
   - TransparentFX
@@ -43,6 +44,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Bin
+    uniqueID: 104266665
+    locked: 0
+  - name: Trash
+    uniqueID: 2321952029
     locked: 0
   m_RenderingLayers:
   - Default
