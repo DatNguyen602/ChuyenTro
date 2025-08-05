@@ -2,7 +2,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Recorder.OutputPath;
 using static UnityEngine.Rendering.DebugUI;
 
 public class JoyStick : MonoBehaviour

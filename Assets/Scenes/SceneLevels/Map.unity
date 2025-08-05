@@ -14651,10 +14651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ae3a752b3fab3438a73b4bd5980f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomDataInfor: {fileID: 0}
   itemControlBtns: {fileID: 0}
   GridItem: {fileID: 0}
-  Shop: {fileID: 103013135}
 --- !u!114 &549238804
 MonoBehaviour:
   m_ObjectHideFlags: 0
