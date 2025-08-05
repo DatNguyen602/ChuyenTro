@@ -66,8 +66,8 @@ public class GamePlayManager : MonoBehaviour
     }
     public void OnTakeRoom()
     {
-        gridContainer.SetActive(true);
-        itemsCanvas.SetActive(true);
+        //gridContainer.SetActive(true);
+        //itemsCanvas.SetActive(true);
     }
 
     public void LoadingScene(string sceneName)
@@ -86,7 +86,6 @@ public class GamePlayManager : MonoBehaviour
             }
         }
     }
-
     public enum GamePhase
     {
         FindingRoom,     // Tìm phòng trọ

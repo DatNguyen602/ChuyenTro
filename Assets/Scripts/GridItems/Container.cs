@@ -51,6 +51,8 @@ public class Container : MonoBehaviour
             scaleFactor = Mathf.Min(1f, 10f / Mathf.Max(size.x, size.y));
         }
 
+        transform.position= Vector2.one * -120;
+
         for (int i = 0; i < size.x; i++)
         {
             stateList.Add(new List<bool>());
@@ -67,17 +69,17 @@ public class Container : MonoBehaviour
             }
         }
 
-        Camera.main.orthographicSize = size.x + 2;
+        GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = size.x + 2;
         zoomSlider.value = size.x + 2;
         zoomSlider.onValueChanged.AddListener(value =>
         {
-            Camera.main.orthographicSize = value;
+            GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = value;
         });
     }
 
     public bool CheckState(Vector2 pos, List<Vector2Int> occupiedCells)
     {
-        Vector2Int cell = new Vector2Int(Mathf.RoundToInt(pos.x + (size.x / 2)), Mathf.RoundToInt(pos.y + (size.y / 2)));
+        Vector2Int cell = new Vector2Int(Mathf.RoundToInt(pos.x + (size.x / 2) + 120), Mathf.RoundToInt(pos.y + (size.y / 2) + 120));
         if (cell.x < 0 || cell.x >= size.x || cell.y < 0 || cell.y >= size.y)
             return false;
 
@@ -97,7 +99,7 @@ public class Container : MonoBehaviour
 
     public void SetState(Vector2 pos, List<Vector2Int> occupiedCells, bool state = true)
     {
-        Vector2Int cell = new Vector2Int(Mathf.RoundToInt(pos.x + (size.x / 2)), Mathf.RoundToInt(pos.y + (size.y / 2)));
+        Vector2Int cell = new Vector2Int(Mathf.RoundToInt(pos.x + (size.x / 2) + 120), Mathf.RoundToInt(pos.y + (size.y / 2) + 120));
         if (cell.x < 0 || cell.x >= size.x || cell.y < 0 || cell.y >= size.y)
             return;
 

@@ -60,6 +60,7 @@ public class PathFollowerDOTween : MonoBehaviour
 
     private void SetupStart()
     {
+        JoyStick.instance.ItemCanvas.SetActive(false);
         var wpList = pathCreator.waypoints;
         Vector3[] pts = wpList
             .Select(wp => pathCreator.transform.TransformPoint(wp.position))
@@ -75,7 +76,7 @@ public class PathFollowerDOTween : MonoBehaviour
 
         sequence = DOTween.Sequence();
         //sequence.Pause();
-        float targetZoom = Camera.main.orthographicSize;
+        float targetZoom = 10;// GamePlayManager.instance.virtualCamera.Lens.OrthographicSize;
         GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = 5;
 
         //sequence.Join(Camera.main.DOOrthoSize(targetZoom, totalDuration).SetEase(Ease.OutQuad));
@@ -145,7 +146,12 @@ public class PathFollowerDOTween : MonoBehaviour
                     {
                         GamePlayManager.instance.Player.SetActive(true);
                     });
-                    //sequence.Join(Camera.main.DOOrthoSize(targetZoom, totalDuration).SetEase(Ease.InOutSine));
+                    sequence.Join(DOTween.To(
+                            () => GamePlayManager.instance.virtualCamera.Lens.OrthographicSize,
+                            x => GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = x,
+                            targetZoom,
+                            segTime
+                        ).SetEase(Ease.InOutSine));
                 }
             }
         }

@@ -6,6 +6,8 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class JoyStick : MonoBehaviour
 {
+    //code singleton
+    public static JoyStick instance;
     public float moveSpeed = 5f;
     public Joystick joystick;
     private Rigidbody2D rb;
@@ -17,6 +19,8 @@ public class JoyStick : MonoBehaviour
     public Button buyButton;
     private RoomInfo currentRoom;
     public GameObject Shop;
+    public GameObject container;
+    public GameObject ItemCanvas;
     public void Show(RoomInfo room)
     {
         currentRoom = room;
@@ -27,11 +31,18 @@ public class JoyStick : MonoBehaviour
 
         panel.SetActive(true); // bật panel
     }
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
-
     private void Update()
     {
         Move();
@@ -79,7 +90,20 @@ public class JoyStick : MonoBehaviour
         if (currentRoom != null)
         {
             TempRoomData.selectedRoom = currentRoom;
-            SceneManager.LoadScene("PlayScene");
+            container.SetActive(true);
+            ItemCanvas.SetActive(true); // Hiển thị canvas chứa item
+            GamePlayManager.instance.virtualCamera.Follow = Container.Instance.transform;
+            panel.SetActive(false); // ẩn panel sau khi mua phòng
+        }
+    }
+    public void TurnOffContainer()
+    {
+        GamePlayManager.instance.virtualCamera.Follow = gameObject.transform;
+        container.SetActive(false); // ẩn container
+        ItemCanvas.SetActive(false); // ẩn canvas chứa item
+        foreach(var item in GridManager.instance.gridItemObjects)
+        {
+            item.gameObject.SetActive(false); // ẩn tất cả các item trong grid
         }
     }
 }
