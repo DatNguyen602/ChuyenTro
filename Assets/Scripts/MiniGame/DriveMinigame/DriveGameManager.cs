@@ -10,6 +10,13 @@ public class DriveGameManager : MonoBehaviour
     public event Action OnPause;
     public event Action OnResume;
     public event Action OnReplay;
+    public event Action OnWin;
+    public event Action<float> OnTimeUpdate;
+
+    [SerializeField] private float gameDuration = 20f;
+    public float GameDuration=>gameDuration;
+    private float timer;
+    private bool isPlaying = false;
 
 
     private void Awake()
@@ -24,13 +31,37 @@ public class DriveGameManager : MonoBehaviour
         }    
     }
 
+    private void Update()
+    {
+        if (isPlaying)
+        {
+            timer -= Time.deltaTime;
+            
+            if (timer <= 0f)
+            {
+                timer= 0f;
+                Win();
+            }
+
+            OnTimeUpdate?.Invoke(timer);
+        }
+    }
+
+    public void Win()
+    {
+        isPlaying = false;
+        OnWin?.Invoke();
+    }
     public void Play()
     {
+        timer =gameDuration;
+        isPlaying = true;
         OnPlay?.Invoke();
     }    
 
     public void Lose()
     {
+        isPlaying = false;
         OnLose?.Invoke();
     }    
 
