@@ -14,6 +14,8 @@ public class Obstacle : MonoBehaviour
         DriveGameManager.Instance.OnPause += StopMoving;
         DriveGameManager.Instance.OnLose += StopMoving;
         DriveGameManager.Instance.OnReplay += DestroyObstacle;
+        DriveGameManager.Instance.OnWin += StopMoving;
+
 
         isMoving = true;
     }

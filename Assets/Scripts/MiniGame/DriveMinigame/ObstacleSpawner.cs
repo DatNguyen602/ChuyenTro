@@ -18,6 +18,7 @@ public class ObstacleSpawner : MonoBehaviour
         DriveGameManager.Instance.OnPause += StopSpawning;
         DriveGameManager.Instance.OnLose += StopSpawning;
         DriveGameManager.Instance.OnReplay += ResetSpawner;
+        DriveGameManager.Instance.OnWin += StopSpawning;
 
         isSpawning = false;
     }
