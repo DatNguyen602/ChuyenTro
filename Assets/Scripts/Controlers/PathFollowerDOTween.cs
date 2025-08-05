@@ -78,7 +78,7 @@ public class PathFollowerDOTween : MonoBehaviour
         sequence.Pause();
         sequence = DOTween.Sequence();
         //sequence.Pause();
-        float targetZoom = Camera.main.orthographicSize;
+        float targetZoom = 10;// Camera.main.orthographicSize;
         GamePlayManager.instance.virtualCamera.Lens.OrthographicSize = 5;
 
         //sequence.Join(Camera.main.DOOrthoSize(targetZoom, totalDuration).SetEase(Ease.OutQuad));
@@ -173,7 +173,7 @@ public class PathFollowerDOTween : MonoBehaviour
         sequence.Restart();
         sequence.Pause();
         sequence = DOTween.Sequence();
-        float targetZoom = Camera.main.orthographicSize;
+        float targetZoom = 10;// Camera.main.orthographicSize;
 
         for (int i = 1; i < pts.Length; i++)
         {
