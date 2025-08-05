@@ -33,8 +33,8 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        RenderMap();
         currentMap = listMap[0];
+        RenderMap();
         mapCanvas.SetActive(false);
     }
 
@@ -49,6 +49,10 @@ public class MapManager : MonoBehaviour
         {
             GameObject mapInstance = Instantiate(mapPrefab, mapParent);
             mapInstance.GetComponentInChildren<TextMeshProUGUI>().text = "Diem buyt:\n" + map.name;
+            if(map == currentMap)
+            {
+                mapInstance.GetComponent<Image>().color = new Color32(115, 186, 169, 255);
+            }
             //if(onClick != null)
             {
                 Button mapButton = mapInstance.GetComponent<Button>() ?? mapInstance.AddComponent<Button>();
@@ -58,6 +62,7 @@ public class MapManager : MonoBehaviour
                     {
                         onClick(currentMap, map);
                         currentMap = map;
+                        RenderMap();
                     }
                     else
                     {

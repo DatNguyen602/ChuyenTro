@@ -74,6 +74,8 @@ public class PathFollowerDOTween : MonoBehaviour
 
         transform.position = pts[0];
 
+        sequence.Restart();
+        sequence.Pause();
         sequence = DOTween.Sequence();
         //sequence.Pause();
         float targetZoom = Camera.main.orthographicSize;
@@ -168,6 +170,8 @@ public class PathFollowerDOTween : MonoBehaviour
 
         transform.position = pts[0];
 
+        sequence.Restart();
+        sequence.Pause();
         sequence = DOTween.Sequence();
         float targetZoom = Camera.main.orthographicSize;
 
