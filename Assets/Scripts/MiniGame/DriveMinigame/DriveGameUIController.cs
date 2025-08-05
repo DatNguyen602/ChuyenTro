@@ -17,7 +17,7 @@ public class DriveGameUIController : MonoBehaviour
 
     private void Start()
     {
-        timeTMP.text = DriveGameManager.Instance.GameDuration.ToString();
+        timeTMP.text = DriveGameManager.Instance.GameDuration.ToString("F2");
         playBtn.onClick.AddListener(() => DriveGameManager.Instance.Play());
         //pauseBtn.onClick.AddListener(() => DriveGameManager.Instance.Pause());
         //resumeBtn.onClick.AddListener(() => DriveGameManager.Instance.Resume());
@@ -57,7 +57,7 @@ public class DriveGameUIController : MonoBehaviour
          };*/
         DriveGameManager.Instance.OnTimeUpdate += (float timer) =>
         {
-            timeTMP.text = timer.ToString();
+            timeTMP.text = timer.ToString("F2");
         };
         DriveGameManager.Instance.OnWin += () =>
         {

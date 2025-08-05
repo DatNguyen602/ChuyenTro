@@ -736,7 +736,7 @@ MonoBehaviour:
   trashSpawner: {fileID: 1496938382}
   touchDragTrash: {fileID: 2057197082}
   trashUI: {fileID: 1463864434}
-  spawnCount: 10
+  spawnCount: 8
   timeLimits: 10
 --- !u!4 &839010970
 Transform:

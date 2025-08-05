@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DriveGameManager : MonoBehaviour
 {
@@ -51,6 +53,7 @@ public class DriveGameManager : MonoBehaviour
     {
         isPlaying = false;
         OnWin?.Invoke();
+        StartCoroutine(ReturnToMapScene());
     }
     public void Play()
     {
@@ -63,6 +66,7 @@ public class DriveGameManager : MonoBehaviour
     {
         isPlaying = false;
         OnLose?.Invoke();
+        StartCoroutine(ReturnToMapScene());
     }    
 
     public void Pause()
@@ -78,5 +82,11 @@ public class DriveGameManager : MonoBehaviour
     public void Replay()
     {
         OnReplay?.Invoke();
+    }
+
+    private IEnumerator ReturnToMapScene()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Map");
     }
 }

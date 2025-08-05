@@ -33,14 +33,31 @@ public class PathFollowerDOTween : MonoBehaviour
             return;
         }
 
-        SetupStart();
+        if (!PlayerPrefs.HasKey("userPosition"))
+        {
+            SetupStart();
+        }
+        else
+        {
+            GamePlayManager.instance.Player.transform.position = JsonUtility.FromJson<Vector3>(PlayerPrefs.GetString("userPosition"));//TempRoomData.userPosition ?? Vector3.zero;
+            TempRoomData.userPosition = null;
+            PlayerPrefs.DeleteKey("userPosition");
+        }
     }
 
     private void OnEnable()
     {
         try
         {
-            SetupStart();
+            if (TempRoomData.userPosition == null)
+            {
+                SetupStart();
+            }
+            else
+            {
+                GamePlayManager.instance.Player.transform.position = TempRoomData.userPosition ?? Vector3.zero;
+                TempRoomData.userPosition = null;
+            }
         }
         catch { }
     }
