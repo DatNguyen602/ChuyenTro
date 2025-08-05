@@ -16,6 +16,8 @@ public class EndlessRoadTextureScroller : MonoBehaviour
         DriveGameManager.Instance.OnPause += StopScrolling;
         DriveGameManager.Instance.OnLose += StopScrolling;
         DriveGameManager.Instance.OnReplay += ResetScrolling;
+        DriveGameManager.Instance.OnWin += StopScrolling;
+
 
         isScrolling = false;
     }

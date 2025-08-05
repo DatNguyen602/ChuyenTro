@@ -20,6 +20,8 @@ public class CarController : MonoBehaviour
         DriveGameManager.Instance.OnPause += HandlePause;
         DriveGameManager.Instance.OnResume += HandleResume;
         DriveGameManager.Instance.OnReplay += HandleReplay;
+        DriveGameManager.Instance.OnWin += HandleWin;
+
 
         isStop = true;
         targetRotation = transform.rotation;
@@ -75,6 +77,8 @@ public class CarController : MonoBehaviour
     void HandleLose() => isStop = true;
     void HandlePause() => isStop = true;
     void HandleResume() => isStop = false;
+    void HandleWin() => isStop = false;
+
     void HandleReplay()
     {
         transform.position = new Vector3(0f, transform.position.y, transform.position.z);
