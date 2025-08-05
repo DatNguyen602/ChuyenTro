@@ -14,9 +14,6 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private GameObject gridContainer;
 
     [SerializeField] private GameObject itemsCanvas;
-
-    [SerializeField] private List<GameObject> gameObjectsToManage;
-    [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
     public GameObject gridItemPrefab;
     private float timerInPlay = 0f;
     public float TimerInPlay
@@ -52,6 +49,7 @@ public class GamePlayManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
@@ -68,8 +66,8 @@ public class GamePlayManager : MonoBehaviour
     }
     public void OnTakeRoom()
     {
-        gridContainer.SetActive(true);
-        itemsCanvas.SetActive(true);
+        //gridContainer.SetActive(true);
+        //itemsCanvas.SetActive(true);
     }
 
     public void LoadingScene(string sceneName)
@@ -88,7 +86,6 @@ public class GamePlayManager : MonoBehaviour
             }
         }
     }
-
     public enum GamePhase
     {
         FindingRoom,     // Tìm phòng trọ
