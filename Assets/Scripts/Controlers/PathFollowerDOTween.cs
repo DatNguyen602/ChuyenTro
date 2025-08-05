@@ -67,6 +67,7 @@ public class PathFollowerDOTween : MonoBehaviour
         GamePlayManager.instance.Player.transform.position = wpList[1].position - Vector3.one;
         GamePlayManager.instance.Player.SetActive(false);
         GamePlayManager.instance.Player.GetComponent<JoyStick>().joystick.gameObject.SetActive(false);
+        GamePlayManager.instance.virtualCamera.Follow = GamePlayManager.instance.Player.transform;
         float totalLen = 0f;
         for (int i = 1; i < pts.Length; i++)
             totalLen += Vector3.Distance(pts[i - 1], pts[i]);
@@ -151,7 +152,7 @@ public class PathFollowerDOTween : MonoBehaviour
         }
     }
 
-    public void ChangeMap()
+    public void ChangeMap(GameObject current, GameObject next)
     {
         var wpList = pathCreator.waypoints;
         Vector3[] pts = wpList
@@ -160,6 +161,7 @@ public class PathFollowerDOTween : MonoBehaviour
         GamePlayManager.instance.Player.transform.position = wpList[1].position - Vector3.one;
         GamePlayManager.instance.Player.SetActive(false);
         GamePlayManager.instance.Player.GetComponent<JoyStick>().joystick.gameObject.SetActive(false);
+        GamePlayManager.instance.virtualCamera.Follow = transform;
         float totalLen = 0f;
         for (int i = 1; i < pts.Length; i++)
             totalLen += Vector3.Distance(pts[i - 1], pts[i]);
@@ -206,6 +208,11 @@ public class PathFollowerDOTween : MonoBehaviour
                     AppendInterval(pause).AppendCallback(() => isPausedAtWaypoint = false);
             }
         }
+        sequence.AppendCallback(() =>
+        {
+            current.SetActive(false);
+            next.SetActive(true);
+        });
     }
 
     private void OnDisable()
