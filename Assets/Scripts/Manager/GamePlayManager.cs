@@ -14,9 +14,6 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private GameObject gridContainer;
 
     [SerializeField] private GameObject itemsCanvas;
-
-    [SerializeField] private List<GameObject> gameObjectsToManage;
-    [SerializeField] private List<GridItem> gridItems = new List<GridItem>();
     public GameObject gridItemPrefab;
     private float timerInPlay = 0f;
     public float TimerInPlay
@@ -52,6 +49,7 @@ public class GamePlayManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
