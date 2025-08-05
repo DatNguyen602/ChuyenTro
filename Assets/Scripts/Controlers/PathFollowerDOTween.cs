@@ -151,6 +151,63 @@ public class PathFollowerDOTween : MonoBehaviour
         }
     }
 
+    public void ChangeMap()
+    {
+        var wpList = pathCreator.waypoints;
+        Vector3[] pts = wpList
+            .Select(wp => pathCreator.transform.TransformPoint(wp.position))
+            .ToArray();
+        GamePlayManager.instance.Player.transform.position = wpList[1].position - Vector3.one;
+        GamePlayManager.instance.Player.SetActive(false);
+        GamePlayManager.instance.Player.GetComponent<JoyStick>().joystick.gameObject.SetActive(false);
+        float totalLen = 0f;
+        for (int i = 1; i < pts.Length; i++)
+            totalLen += Vector3.Distance(pts[i - 1], pts[i]);
+
+        transform.position = pts[0];
+
+        sequence = DOTween.Sequence();
+        float targetZoom = Camera.main.orthographicSize;
+
+        for (int i = 1; i < pts.Length; i++)
+        {
+            if (i == 1) sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(true));
+            Vector3 from = pts[i - 1];
+            Vector3 to = pts[i];
+            float segLen = Vector3.Distance(from, to);
+            float segTime = totalDuration * (segLen / totalLen);
+
+            Vector3 dir = (to - from).normalized;
+            float angle = Mathf.Atan2((to - from).y, (to - from).x) * Mathf.Rad2Deg;
+            sequence.Append(transform.DOMove(to, segTime).SetEase(Ease.Linear))
+                    .Join(transform.DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutQuad));
+
+            if (i == pts.Length - 1)
+            {
+                sequence.AppendCallback(() => transform.GetChild(0).gameObject.SetActive(false));
+            }
+
+            float pause = 0;
+            if (wpList[i].pauseDuration.from >= 0 && wpList[i].pauseDuration.to > 0)
+            {
+                if (wpList[i].pauseDuration.from < wpList[i].pauseDuration.to)
+                {
+                    pause = Random.Range(wpList[i].pauseDuration.from, wpList[i].pauseDuration.to);
+                }
+                else if (wpList[i].pauseDuration.from == wpList[i].pauseDuration.to)
+                {
+                    pause = wpList[i].pauseDuration.from;
+                }
+            }
+
+            if (pause > 0f)
+            {
+                sequence.AppendCallback(() => isPausedAtWaypoint = true).
+                    AppendInterval(pause).AppendCallback(() => isPausedAtWaypoint = false);
+            }
+        }
+    }
+
     private void OnDisable()
     {
         sequence?.Kill();
