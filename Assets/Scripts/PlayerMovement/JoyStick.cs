@@ -94,6 +94,7 @@ public class JoyStick : MonoBehaviour
             ItemCanvas.SetActive(true); // Hiển thị canvas chứa item
             GamePlayManager.instance.virtualCamera.Follow = Container.Instance.transform;
             panel.SetActive(false); // ẩn panel sau khi mua phòng
+            joystick.gameObject.SetActive(false); // ẩn nhân vật sau khi mua phòng
         }
     }
     public void TurnOffContainer()
@@ -105,5 +106,6 @@ public class JoyStick : MonoBehaviour
         {
             item.gameObject.SetActive(false); // ẩn tất cả các item trong grid
         }
+        joystick.gameObject.SetActive(true); // hiện lại nhân vật
     }
 }
