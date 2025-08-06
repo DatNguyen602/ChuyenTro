@@ -2453,7 +2453,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 549238806}
         m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
         m_MethodName: retunObjtoList
         m_Mode: 1
@@ -16193,7 +16193,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 549238806}
         m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
         m_MethodName: RotateSelectedClockwise
         m_Mode: 1
@@ -22285,7 +22285,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 549238806}
         m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
         m_MethodName: RotateSelectedCounterClockwise
         m_Mode: 1

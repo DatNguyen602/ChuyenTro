@@ -233,7 +233,13 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if(selectedObject != null)
         {
-            Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, false);
+            Container.Instance.SetState(
+                new Vector2(
+                    Mathf.FloorToInt(selectedObject.transform.position.x),
+                    Mathf.FloorToInt(selectedObject.transform.position.y))
+                , 
+                selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, 
+                false);
             gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
             GamePlayManager.instance.RendererList(selectedObject.GetComponent<GridItemObject>().gridItem, gridParent);
             ItemInf imt = TempRoomData.itemList.Find(x => x.item.Equals(selectedObject.GetComponent<GridItemObject>().gridItem));
@@ -311,7 +317,14 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         selectedObject.transform.localRotation = Quaternion.Euler(0, 0, newZ);
 
         // Đặt lại state mới
-        Container.Instance.SetState(pos, newCells, true);
+        Container.Instance.SetState(new Vector2(
+                        Mathf.FloorToInt(pos.x),
+                        Mathf.FloorToInt(pos.y)), newCells, true);
+        ItemInf imt = TempRoomData.itemList.Find(x => x.item.Equals(selectedObject.GetComponent<GridItemObject>().gridItem));
+        if (imt != null)
+        {
+            imt.dir = (int) newZ;
+        }
 
         Debug.Log("Xoay thành công.");
     }
