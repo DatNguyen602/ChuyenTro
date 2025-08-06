@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DartGameController : MonoBehaviour
 {
@@ -175,6 +176,7 @@ public class DartGameController : MonoBehaviour
         bool isWin = currentScore >= targetScore;
         resultTMP.text = isWin ? "You Win!" : "You Lose!";
         isPlaying = false;
+        StartCoroutine(ReturnToMapScene());
     }
 
     private IEnumerator CameraZoomEffect(Vector3 focusPoint)
@@ -214,5 +216,11 @@ public class DartGameController : MonoBehaviour
 
         mainCamera.orthographicSize = originalSize;
         mainCamera.transform.position = originalPos;
+    }
+
+    private IEnumerator ReturnToMapScene()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Map");
     }
 }

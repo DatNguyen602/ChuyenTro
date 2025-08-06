@@ -1497,7 +1497,7 @@ MonoBehaviour:
   mainCamera: {fileID: 459042298}
   zoomSize: 3
   zoomDuration: 0.15
-  targetScore: 50
+  targetScore: 80
   maxThrows: 3
   speed: 5.47
 --- !u!4 &1829638462

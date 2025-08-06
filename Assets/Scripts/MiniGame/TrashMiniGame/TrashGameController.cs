@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TrashGameController : MonoBehaviour
 {
@@ -43,6 +45,7 @@ public class TrashGameController : MonoBehaviour
         {
             trashUI.ShowTimeOutVisual();
             touchDragTrash.enabled = false;
+            StartCoroutine(ReturnToMapScene());
         }
     }
 
@@ -53,8 +56,13 @@ public class TrashGameController : MonoBehaviour
         {
             trashUI.ShowDoneVisual();
             touchDragTrash.enabled=false;
+            StartCoroutine(ReturnToMapScene());
         }
 
-    }    
-
+    }
+    private IEnumerator ReturnToMapScene()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Map");
+    }
 }
