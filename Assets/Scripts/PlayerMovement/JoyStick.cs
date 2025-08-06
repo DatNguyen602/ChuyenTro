@@ -71,6 +71,7 @@ public class JoyStick : MonoBehaviour
         else if (collision.gameObject.tag == ("Shop"))
         {
             Shop.SetActive(true); // Hiển thị cửa hàng khi va chạm với đối tượng có tag "Shop"
+            BuyAndSell.instance.RenderBuyList(); // Hiển thị danh sách mua bán trong cửa hàng
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -106,6 +107,11 @@ public class JoyStick : MonoBehaviour
         {
             item.gameObject.SetActive(false); // ẩn tất cả các item trong grid
         }
+        joystick.gameObject.SetActive(true); // hiện lại nhân vật
+    }
+    public void TurnOffShop()
+    {
+        Shop.SetActive(false); // ẩn cửa hàng
         joystick.gameObject.SetActive(true); // hiện lại nhân vật
     }
 }
