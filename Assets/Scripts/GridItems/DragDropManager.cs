@@ -78,7 +78,15 @@ public class DragDropManager : MonoBehaviour
                     Container.Instance.SetState(
                         new Vector2Int(Mathf.FloorToInt(hit.collider.transform.position.x), Mathf.FloorToInt(hit.collider.transform.position.y)),
                         objectDrag.GetComponent<GridItemObject>().gridItem.occupiedCellsStart);
-            objectDrag.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+                Vector2 cell = new Vector2(
+                    hit.collider.transform.position.x, 
+                    hit.collider.transform.position.y);
+                TempRoomData.itemList.Add(new ItemInf(
+                    objectDrag.GetComponent<GridItemObject>().gridItem,
+                    cell,
+                    0
+                ));
+                objectDrag.GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
 
             objectDrag.GetComponent<PolygonCollider2D>().enabled = true;

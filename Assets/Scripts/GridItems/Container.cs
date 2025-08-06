@@ -9,7 +9,7 @@ public class Container : MonoBehaviour
     public Vector2Int size = new Vector2Int(1, 1);
     [SerializeField] private GameObject squarePrefab;
 
-    private List<List<bool>> stateList = new List<List<bool>>();
+    public List<List<bool>> stateList = new List<List<bool>>();
 
     // Khoảng cách giữa các ô (nên nhỏ hơn với mobile)
     [SerializeField] private float spacing = 1f;
@@ -30,7 +30,7 @@ public class Container : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void OnEnable()
+    void Start()
     {
         size= TempRoomData.selectedRoom.size;
         if (size.x < size.y)

@@ -91,11 +91,20 @@ public class JoyStick : MonoBehaviour
         if (currentRoom != null)
         {
             TempRoomData.selectedRoom = currentRoom;
+
+            for (int i = 0; i < GridManager.instance.gridItems.Count; i++)
+            {
+                GamePlayManager.instance.RendererList(
+                    GridManager.instance.gridItems[i],
+                    GridManager.instance.gridParent, i <
+                    GridManager.instance.gridParent.childCount ? GridManager.instance.gridParent.GetChild(i).gameObject : null);
+            }
             container.SetActive(true);
             ItemCanvas.SetActive(true); // Hiển thị canvas chứa item
             GamePlayManager.instance.virtualCamera.Follow = Container.Instance.transform;
             panel.SetActive(false); // ẩn panel sau khi mua phòng
             joystick.gameObject.SetActive(false); // ẩn nhân vật sau khi mua phòng
+            GridManager.instance.RecheckRoomItem(); // Hiển thị các item trong grid
         }
     }
     public void TurnOffContainer()

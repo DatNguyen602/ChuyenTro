@@ -9,7 +9,7 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public GameObject gridItemPrefab, itemTemplate;
     [SerializeField] public List<GridItem> gridItems = new List<GridItem>();
-    [SerializeField] private Transform gridParent;
+    [SerializeField] public Transform gridParent;
     [SerializeField] private ScrollRect scrollRect;
 
     [SerializeField] private GraphicRaycaster raycaster;
@@ -42,18 +42,51 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
     }
-    void Start()
+    void OnEnable()
     {
-        
-        for( int i = 0; i < gridItems.Count; i++)
-        {
-            GamePlayManager.instance.RendererList(gridItems[i], gridParent, i < gridParent.childCount ? gridParent.GetChild(i).gameObject : null);
-        }
         for (int i =0;i<10;i++)
         {
             GameObject item = Instantiate(itemTemplate);
             item.SetActive(false);
             gridItemObjects.Add(item);
+        }
+    }
+
+    public void RecheckRoomItem()
+    {
+        for(int i = 0; i < Container.Instance.transform.childCount; i++)
+        {
+            Container.Instance.transform.GetChild(i).GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        foreach(GameObject obj in gridItemObjects)
+        {
+            obj.SetActive(false);
+        }
+        foreach(List<bool> t in Container.Instance.stateList)
+        {
+            for(int i = 0; i < t.Count; i++)
+            {
+                t[i] = false;
+            }
+        }
+
+        if(TempRoomData.itemList != null && TempRoomData.itemList.Count > 0)
+        {
+            foreach (ItemInf item in TempRoomData.itemList)
+            {
+                GameObject tmp = GetItemObject();
+                Container.Instance.SetState(
+                    new Vector2(
+                        Mathf.FloorToInt(item.pos.x),
+                        Mathf.FloorToInt(item.pos.y))
+                    , item.item.occupiedCellsStart);
+                tmp.SetActive(true);
+                tmp.transform.position = item.pos;
+                tmp.GetComponentInChildren<SpriteRenderer>().sprite = item.item.spriteTemp;
+                tmp.transform.GetChild(0).localScale = Vector3.one * item.item.spriteScale;
+                tmp.transform.GetChild(0).localPosition = item.item.spriteOffsetPercent;
+                tmp.transform.localRotation = Quaternion.Euler(0, 0, item.dir);
+            }
         }
     }
 
@@ -203,6 +236,11 @@ public class GridManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Container.Instance.SetState(selectedObject.transform.position, selectedObject.GetComponent<GridItemObject>().gridItem.occupiedCellsStart, false);
             gridItems.Add(selectedObject.GetComponent<GridItemObject>().gridItem);
             GamePlayManager.instance.RendererList(selectedObject.GetComponent<GridItemObject>().gridItem, gridParent);
+            ItemInf imt = TempRoomData.itemList.Find(x => x.item.Equals(selectedObject.GetComponent<GridItemObject>().gridItem));
+            if(imt != null)
+            {
+                TempRoomData.itemList.Remove(imt);
+            }
             selectedObject.SetActive(false);
             selectedObject = null;
             itemSelectedData = null;
