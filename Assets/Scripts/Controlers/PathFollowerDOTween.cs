@@ -33,14 +33,26 @@ public class PathFollowerDOTween : MonoBehaviour
             return;
         }
 
-        SetupStart();
+        if (TempRoomData.isSetPos)
+        {
+            GamePlayManager.instance.Player.transform.position = TempRoomData.userPosition;
+            JoyStick.instance.ItemCanvas.SetActive(false);
+            TempRoomData.isSetPos = false;
+        }
+        else
+        {
+            SetupStart();
+        }
     }
 
     private void OnEnable()
     {
         try
         {
-            SetupStart();
+            if(!TempRoomData.isSetPos)
+            {
+                SetupStart();
+            }
         }
         catch { }
     }

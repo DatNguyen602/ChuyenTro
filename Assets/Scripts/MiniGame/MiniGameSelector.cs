@@ -18,7 +18,8 @@ public class MiniGameSelector : MonoBehaviour
 
     private void LoadScene(string sceneName)
     {
-       
+        TempRoomData.isSetPos = true;
+        TempRoomData.userPosition = GamePlayManager.instance.Player.transform.position;
         SceneManager.LoadScene(sceneName);
     }
 
