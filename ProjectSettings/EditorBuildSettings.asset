@@ -20,6 +20,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterSelect.unity
     guid: ff7d2f38fb1e0f04c826cf051cfb5a5f
+  - enabled: 1
+    path: Assets/Scenes/DriveMiniGame.unity
+    guid: fc635ba0a1c8e424587be6c962fe21c5
+  - enabled: 1
+    path: Assets/Scenes/DartMiniGame.unity
+    guid: efa40d7a746c8824aace1546a356ec5a
+  - enabled: 1
+    path: Assets/Scenes/TrashMiniGame.unity
+    guid: be2c29842bb6d3b4692411287f517418
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
